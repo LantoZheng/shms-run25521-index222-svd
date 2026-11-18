@@ -2,7 +2,7 @@
   "test": "verbatim HCANA ReadDatabase matrix-reader block plus verbatim current writer block",
   "hcana_commit": "ce5f975288010984a6d66fd3bde4bee95fc36ba2",
   "reader_block_sha256": "90066ae0ae612e7bfdd7dc317198387981264a21f79ea29ed1049640e120552e",
-  "fitter_sha256": "391a1374d5b5e309065c7d3600ae7ab51dd5187ff83b9537734c39f499751f7e",
+  "fitter_sha256": "d795b146d3d1e59f2a8247aece65d3a4c465c3c0ec3fc3c504bdac562cb56440",
   "positive_cases": [
     {
       "file": "weighted/matrices/nps_shms_newfit_25523_legacy.dat",
@@ -30,7 +30,7 @@
       "exact_coefficients_and_exponents": true
     },
     {
-      "file": "/tmp/tmpnyhs7l56/emitted.dat",
+      "file": "/tmp/tmpep65qgrf/emitted.dat",
       "terms_read": 3,
       "exact_coefficients_and_exponents": true
     }

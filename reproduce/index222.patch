@@ -1,39 +1,123 @@
+diff --git a/fit_opt_matrix_gmm.C b/fit_opt_matrix_gmm.C
+index 1473a93..5820653 100644
+--- a/fit_opt_matrix_gmm.C
++++ b/fit_opt_matrix_gmm.C
+@@ -121,7 +121,7 @@ void fit_opt_matrix_gmm(
+ 
+   string oldcoeffsfilename = oldCoeffsFile.Data();
+   int nfit=0,npar,nfit_max=nfit_max_arg,npar_final=0,max_order=6,norder;
+-  Int_t MaxPerBin=1000;
++
+   Int_t MaxZtarPerBin=nfit_max_arg;
+ 
+   //
+@@ -514,7 +514,7 @@ void fit_opt_matrix_gmm(
+ 	  good_bin=kTRUE;
+ 	}
+ 
+-	if (good_bin && nfit < nfit_max && Ztar_Ys_Delta_Cnts[found_nf][found_nd][found_ny]< MaxPerBin && Ztar_Cnts[found_nf]< MaxZtarPerBin && Ztar_Cnts[found_nf]<Max_Per_Run_Per_Foil[found_nf]) {
++	if (good_bin && nfit < nfit_max && Ztar_Cnts[found_nf]< MaxZtarPerBin && Ztar_Cnts[found_nf]<Max_Per_Run_Per_Foil[found_nf]) {
+ 
+ 	  //reconstruct it
+ 	  Double_t ytar_xtar = 0.0,yptar_xtar=0.0,xptar_xtar=0.0;
 diff --git a/run25521/reproduce/audit_selection_order.py b/run25521/reproduce/audit_selection_order.py
-index 2e899aa..7c5c9d9 100644
+index 2e899aa..375a438 100644
 --- a/run25521/reproduce/audit_selection_order.py
 +++ b/run25521/reproduce/audit_selection_order.py
-@@ -5,7 +5,7 @@ import numpy as np,uproot
+@@ -3,27 +3,27 @@ from pathlib import Path
+ import sys,json
+ import numpy as np,uproot
  repo=Path(__file__).resolve().parents[2];out=repo/'run25521';source=Path(sys.argv[1]);work=Path(sys.argv[2])
- loaded=np.load(source/'data_1.npz',allow_pickle=False);p={k:loaded[k] for k in loaded.files};s=np.load(work/'selection.npz');n=len(p['run']);idx=s['indices'];d=p['delta_percent'];foil=p['foil_id'];entry=p['source_full_entry'];eligible=s['eligible'];native=s['native'];selected=np.zeros(n,bool);selected[idx]=True
+-loaded=np.load(source/'data_1.npz',allow_pickle=False);p={k:loaded[k] for k in loaded.files};s=np.load(work/'selection.npz');n=len(p['run']);idx=s['indices'];d=p['delta_percent'];foil=p['foil_id'];entry=p['source_full_entry'];eligible=s['eligible'];native=s['native'];selected=np.zeros(n,bool);selected[idx]=True
++loaded=np.load(source/'data_1.npz',allow_pickle=False);p={k:loaded[k] for k in loaded.files};s=np.load(work/'selection.npz');n=len(p['run']);idx=s['indices'];d=p['delta_percent'];foil=p['foil_id'];entry=p['source_full_entry'];eligible=s['eligible'];selected=np.zeros(n,bool);selected[idx]=True
  assert np.all(np.diff(entry)>0) and np.all(np.diff(idx)>0)
 -limit=24396;edges=np.array([-25.,-6.,-2.,2.,6.,10.,22.]);cells=np.zeros((3,6,11),int);totals=np.zeros(3,int);singlepass=[]
-+limit=24663;edges=np.array([-25.,-6.,-2.,2.,6.,10.,22.]);cells=np.zeros((3,6,11),int);totals=np.zeros(3,int);singlepass=[]
++limit=min(int(np.sum(eligible & (foil==f))) for f in range(3));edges=np.array([-25.,-6.,-2.,2.,6.,10.,22.]);cells=np.zeros((3,6,11),int);totals=np.zeros(3,int);singlepass=[]
  for i in range(n):
   nf=int(foil[i]);nd=np.searchsorted(edges,d[i],side='right')-1;ny=int(p['hole_row'][i])+5
-  if -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and cells[nf,nd,ny]<1000 and totals[nf]<limit:
+- if -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and cells[nf,nd,ny]<1000 and totals[nf]<limit:
++ if -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and not p['index_review_required'][i] and totals[nf]<limit:
+   singlepass.append(i);cells[nf,nd,ny]+=1;totals[nf]+=1
+ assert np.array_equal(np.array(singlepass),idx)
+ with uproot.open(work/'SHMS_run25521/balanced/Optics_25521_-1_fit_tree_gmm.root') as f:
+  a=f['TFit'].arrays(['source_full_entry'],library='np')
+ assert np.array_equal(a['source_full_entry'],entry[idx])
+-report={'source_entries_strictly_increasing':True,'selected_indices_strictly_increasing':True,'balanced_tree_provenance_exactly_matches_selected_source_order':True,'single_pass_native_bin_and_foil_cap_scan_exactly_matches_two_stage_preparation':True,'randomization':False,'delta_sorting':False,'foil_cap':limit,'foil_counts':{},'near_minus6_counts':[]}
++report={'source_entries_strictly_increasing':True,'selected_indices_strictly_increasing':True,'balanced_tree_provenance_exactly_matches_selected_source_order':True,'single_pass_eligible_and_foil_balance_scan_exactly_matches_two_stage_preparation':True,'randomization':False,'delta_sorting':False,'foil_cap':limit,'foil_counts':{},'near_minus6_counts':[]}
+ for f in range(3):
+- mask=foil==f;keep=np.flatnonzero(selected&mask);before=np.flatnonzero(native&mask)
++ mask=foil==f;keep=np.flatnonzero(selected&mask);before=np.flatnonzero(eligible&mask)
+  assert np.array_equal(keep,before[:limit])
+- report['foil_counts'][str(f)]={'available':int(mask.sum()),'eligible':int(np.sum(mask&eligible)),'native_bin_capped':len(before),'fitted':len(keep),'removed_by_extra_foil_total_cap':len(before)-len(keep),'last_selected_input_row_zero_based':int(keep[-1]),'last_selected_source_full_entry':int(entry[keep[-1]]),'last_native_source_full_entry':int(entry[before[-1]])}
++ report['foil_counts'][str(f)]={'available':int(mask.sum()),'eligible':int(np.sum(mask&eligible)),'fitted':len(keep),'removed_by_extra_foil_total_cap':len(before)-len(keep),'last_selected_input_row_zero_based':int(keep[-1]),'last_selected_source_full_entry':int(entry[keep[-1]]),'last_native_source_full_entry':int(entry[before[-1]])}
+ for f in [None,0,1,2]:
+  for lo,hi in [(-7,-6),(-6,-5)]:
+   mask=(d>=lo)&(d<hi)
+   if f is not None:mask&=foil==f
+-  counts={name:int(np.sum(mask&stage)) for name,stage in [('available',np.ones(n,bool)),('eligible',eligible),('native_bin_capped',native),('fitted',selected)]}
++  counts={name:int(np.sum(mask&stage)) for name,stage in [('available',np.ones(n,bool)),('eligible',eligible),('fitted',selected)]}
+   report['near_minus6_counts'].append({'foil':f,'delta_low':lo,'delta_high':hi,**counts})
+ (out/'selection_order_audit.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps(report,indent=2))
+diff --git a/run25521/reproduce/fit_run25521.C b/run25521/reproduce/fit_run25521.C
+index f7a6107..21f2408 100644
+--- a/run25521/reproduce/fit_run25521.C
++++ b/run25521/reproduce/fit_run25521.C
+@@ -125,7 +125,7 @@ void fit_run25521(
+ 
+   string oldcoeffsfilename = oldCoeffsFile.Data();
+   int nfit=0,npar,nfit_max=nfit_max_arg,npar_final=0,max_order=6,norder;
+-  Int_t MaxPerBin=1000;
++
+   Int_t MaxZtarPerBin=nfit_max_arg;
+ 
+   //
+@@ -522,7 +522,7 @@ void fit_run25521(
+ 	  good_bin=kTRUE;
+ 	}
+ 
+-	if (good_bin && nfit < nfit_max && Ztar_Ys_Delta_Cnts[found_nf][found_nd][found_ny]< MaxPerBin && Ztar_Cnts[found_nf]< MaxZtarPerBin && Ztar_Cnts[found_nf]<Max_Per_Run_Per_Foil[found_nf]) {
++	if (good_bin && nfit < nfit_max && Ztar_Cnts[found_nf]< MaxZtarPerBin && Ztar_Cnts[found_nf]<Max_Per_Run_Per_Foil[found_nf]) {
+ 
+ 	  //reconstruct it
+ 	  Double_t ytar_xtar = 0.0,yptar_xtar=0.0,xptar_xtar=0.0;
 diff --git a/run25521/reproduce/foil_slice_diagnostics.py b/run25521/reproduce/foil_slice_diagnostics.py
-index 93de0cf..f633329 100644
+index 93de0cf..047b2c7 100644
 --- a/run25521/reproduce/foil_slice_diagnostics.py
 +++ b/run25521/reproduce/foil_slice_diagnostics.py
-@@ -92,7 +92,7 @@ for case in ['unweighted','weighted']:
+@@ -10,6 +10,8 @@ from pypdf import PdfReader,PdfWriter
+ ROOT.gROOT.SetBatch(True); ROOT.gStyle.SetOptStat(0); ROOT.gStyle.SetTitleFontSize(.045)
+ ROOT.gStyle.SetPadLeftMargin(.14); ROOT.gStyle.SetPadRightMargin(.13)
+ repo=Path(__file__).resolve().parents[2]; out=repo/'run25521'; work=Path(sys.argv[1])
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
+ sel=json.loads((out/'selection.json').read_text()); edges=sel['edges_percent']; counts=np.array(sel['selected_delta_sieve_counts']).sum(axis=2)
+ zs=[10,0,-10]; foilnames=['foil_0_z_plus10','foil_1_z_0','foil_2_z_minus10']; slices=['delta_00_minus15_to_minus6','delta_01_minus6_to_minus2','delta_02_minus2_to_plus2','delta_03_plus2_to_plus6','delta_04_plus6_to_plus10','delta_05_plus10_to_plus22']
+ axes=['xptar','ytar','yptar']; units=['mrad','cm','mrad']; ranges=[20,5,20]
+@@ -92,7 +94,7 @@ for case in ['unweighted','weighted']:
   for side in ['old','new']:
    records=[r for r in report['case_side_foil_slices'] if r['case']==case and r['side']==side]
    assert len(records)==18 and sum(r['events'] for r in records)==sel['fit_events']
 -  assert all(sum(r['events'] for r in records if r['foil_id']==f)==24396 for f in range(3))
-+  assert all(sum(r['events'] for r in records if r['foil_id']==f)==24663 for f in range(3))
++  assert all(sum(r['events'] for r in records if r['foil_id']==f)==per_foil for f in range(3))
  with (out/'foil_slice_metrics.csv').open('w') as stream:
   writer=csv.DictWriter(stream,fieldnames=list(metrics[0]),lineterminator='\n');writer.writeheader();writer.writerows(metrics)
  (out/'foil_slice_validation.json').write_text(json.dumps(report,indent=2)+'\n')
 diff --git a/run25521/reproduce/index_foil_slices.py b/run25521/reproduce/index_foil_slices.py
-index 98992a2..644fa18 100644
+index 98992a2..56eabfe 100644
 --- a/run25521/reproduce/index_foil_slices.py
 +++ b/run25521/reproduce/index_foil_slices.py
-@@ -5,7 +5,7 @@ out=Path(__file__).resolve().parents[1]; records=json.loads((out/'foil_slice_val
+@@ -2,10 +2,12 @@
+ import json
+ from pathlib import Path
+ out=Path(__file__).resolve().parents[1]; records=json.loads((out/'foil_slice_validation.json').read_text())['case_side_foil_slices']
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
  zs=[10,0,-10]; folders=['foil_0_z_plus10','foil_1_z_0','foil_2_z_minus10']
  lines=['# Run 25521 diagnostics: choose a foil, then a delta slice','',
  'For the exact requested historical views, start with [NPS_HMS_OPTICS legacy macro reports](NPS_LEGACY_DIAGNOSTICS.md). These expanded distributions are supplemental. The original summary PDFs combine foils. **Use the links below for the actual foil-by-foil inspection.** Each foil report contains six delta slices, in increasing delta order; its PDF bookmarks select a slice. Each slice has five pages, described below.','',
 -'All views use the identical 73,188 fitted events (24,396 per foil), with matching old/new matrix inputs. There has been no refit or change to any matrix.','',
-+'All views use the identical 73,989 fitted events (24,663 per foil), with matching old/new matrix inputs. There has been no refit or change to any matrix.','',
++f'All views use the identical {fit_n:,} fitted events ({per_foil:,} per foil), with matching old/new matrix inputs. There has been no refit or change to any matrix.','',
  '## One report per foil','',
  '| Method | Foil label / z | Old matrix (30 pages) | New matrix (30 pages) |','|---|---|---|---|']
  for case,label in [('unweighted','Unweighted legacy fit'),('weighted','Supplied weights')]:
@@ -51,89 +135,163 @@ index 21536bd..eed8fe9 100644
   h=ROOT.TH1D('delta_'+str(k),f'{title}, N={len(values)};Delta (%);Events / 1% bin',54,-20,34);h.SetDirectory(0)
   for value in values:h.Fill(float(value))
 diff --git a/run25521/reproduce/plot_delta_histograms.py b/run25521/reproduce/plot_delta_histograms.py
-index 69618b6..c56524e 100644
+index 69618b6..8e56913 100644
 --- a/run25521/reproduce/plot_delta_histograms.py
 +++ b/run25521/reproduce/plot_delta_histograms.py
-@@ -14,7 +14,7 @@ edges=np.arange(-15.,23.);hist=[];rows=[];report={'selection':'shared fitted eve
+@@ -3,6 +3,8 @@ from pathlib import Path
+ import sys,json,csv
+ import numpy as np,uproot,ROOT
+ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[1]);dest=out/'plots';dest.mkdir(exist_ok=True)
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
+ with uproot.open(work/'SHMS_run25521/balanced/Optics_25521_-1_fit_tree_gmm.root') as f:a=f['TFit'].arrays(['delta','ztarT'],library='np')
+ # Verify the displayed delta and foil arrays are shared by both new-fit inputs.
+ for case in ['unweighted','weighted']:
+@@ -14,7 +16,7 @@ edges=np.arange(-15.,23.);hist=[];rows=[];report={'selection':'shared fitted eve
  for k,z in enumerate([None,10,0,-10]):
   mask=np.ones(len(a['delta']),bool) if z is None else a['ztarT']==z
   values=a['delta'][mask];counts,_=np.histogram(values,bins=edges)
 - assert int(counts.sum())==len(values)==(73188 if z is None else 24396)
-+ assert int(counts.sum())==len(values)==(73989 if z is None else 24663)
++ assert int(counts.sum())==len(values)==(fit_n if z is None else per_foil)
   title='All three foils' if z is None else f'Foil {k-1}: z={z:+d} cm'
   h=ROOT.TH1D('delta_'+str(k),f'{title}, N={len(values)};Delta (%);Events / 1% bin',37,-15,22);h.SetDirectory(0)
   for value in values:h.Fill(float(value))
 diff --git a/run25521/reproduce/plot_delta_vs_ytar.py b/run25521/reproduce/plot_delta_vs_ytar.py
-index 381a8aa..e143612 100644
+index 381a8aa..cd6bdd0 100644
 --- a/run25521/reproduce/plot_delta_vs_ytar.py
 +++ b/run25521/reproduce/plot_delta_vs_ytar.py
-@@ -6,7 +6,7 @@ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[
+@@ -3,10 +3,12 @@ from pathlib import Path
+ import sys,json
+ import numpy as np,uproot,ROOT
+ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[1])
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
  ROOT.gROOT.SetBatch(True);ROOT.gStyle.SetOptStat(0);ROOT.gStyle.SetPalette(ROOT.kBird)
  ROOT.gStyle.SetPadLeftMargin(.12);ROOT.gStyle.SetPadRightMargin(.15)
  ROOT.gStyle.SetTitleFontSize(.045)
 -report={'horizontal_axis':'new-matrix reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (percent), unchanged by angular fit','event_count_histograms':True,'logarithmic_color':True,'selection':'same 73188 fitted events, 24396 per foil','new_full_replay':False,'cases':{}}
-+report={'horizontal_axis':'new-matrix reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (percent), unchanged by angular fit','event_count_histograms':True,'logarithmic_color':True,'selection':'same 73989 fitted events, 24663 per foil','new_full_replay':False,'cases':{}}
++report={'horizontal_axis':'new-matrix reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (percent), unchanged by angular fit','event_count_histograms':True,'logarithmic_color':True,'selection':f'same {fit_n} fitted events, {per_foil} per foil','new_full_replay':False,'cases':{}}
  arrays={}
  for case in ['unweighted','weighted']:
   with uproot.open(work/'SHMS_run25521'/f'{case}_new.root') as f:arrays[case]=f['TFit'].arrays(['ytar','delta','ztarT'],library='np')
-@@ -19,7 +19,7 @@ for case in arrays:
+@@ -19,7 +21,7 @@ for case in arrays:
    mask=np.ones(len(a['ytar']),bool) if z is None else a['ztarT']==z
    h=ROOT.TH2D(f'{case}_{"all" if z is None else str(z)}','',180,-5,5,148,-15,22);h.SetDirectory(0)
    for x,y in zip(a['ytar'][mask],a['delta'][mask]):h.Fill(float(x),float(y))
 -  assert int(h.GetEntries())==(73188 if z is None else 24396)
-+  assert int(h.GetEntries())==(73989 if z is None else 24663)
++  assert int(h.GetEntries())==(fit_n if z is None else per_foil)
    assert h.Integral()==h.GetEntries() # no events hidden outside plotted ranges
    hist.append(h);keep.append(h)
   allhist[case]=hist
 diff --git a/run25521/reproduce/plot_delta_vs_ytar_comparison.py b/run25521/reproduce/plot_delta_vs_ytar_comparison.py
-index 723784f..c392d07 100644
+index 723784f..cfb0242 100644
 --- a/run25521/reproduce/plot_delta_vs_ytar_comparison.py
 +++ b/run25521/reproduce/plot_delta_vs_ytar_comparison.py
-@@ -13,18 +13,18 @@ for case in ['unweighted','weighted']:
+@@ -3,6 +3,8 @@ from pathlib import Path
+ import sys,json
+ import numpy as np,uproot,ROOT
+ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[1])
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
+ ROOT.gROOT.SetBatch(True);ROOT.gStyle.SetOptStat(0);ROOT.gStyle.SetPalette(ROOT.kBird)
+ ROOT.gStyle.SetPadLeftMargin(.12);ROOT.gStyle.SetPadRightMargin(.15);ROOT.gStyle.SetTitleFontSize(.042)
+ arrays={};hist={};keep=[]
+@@ -13,18 +15,19 @@ for case in ['unweighted','weighted']:
  for key,a in arrays.items():
   for field in fields:
    if field!='ytar':assert np.array_equal(a[field],arrays['unweighted','old'][field]),(key,field)
 - assert len(a['ytar'])==73188
-+ assert len(a['ytar'])==73989
- xmin,xmax=-6.,6.;ymin,ymax=-15.,22.;nbx,nby=216,148
+-xmin,xmax=-6.,6.;ymin,ymax=-15.,22.;nbx,nby=216,148
++ assert len(a['ytar'])==fit_n
++extent = max(6, 1 + int(max(np.max(np.abs(a['ytar'])) for a in arrays.values())))
++xmin,xmax=-extent,extent;ymin,ymax=-15.,22.;nbx,nby=36*extent,148
  for (case,side),a in arrays.items():
   for k,z in enumerate([None,10,0,-10]):
    mask=np.ones(len(a['ytar']),bool) if z is None else a['ztarT']==z
    h=ROOT.TH2D(f'{case}_{side}_{k}','',nbx,xmin,xmax,nby,ymin,ymax);h.SetDirectory(0)
    for x,y in zip(a['ytar'][mask],a['delta'][mask]):h.Fill(float(x),float(y))
 -  assert int(h.GetEntries())==(73188 if z is None else 24396)
-+  assert int(h.GetEntries())==(73989 if z is None else 24663)
++  assert int(h.GetEntries())==(fit_n if z is None else per_foil)
    assert h.Integral()==h.GetEntries()
    hist[case,side,k]=h;keep.append(h)
  maxcolor=float(max(h.GetMaximum() for h in hist.values()))
 -report={'selection':'identical 73188 fitted events (24396 per foil), both methods, before and after','same_input_arrays_and_order_checked':True,'before':'starting matrix evaluated at geometric xtar','after':'emitted new fit matrix evaluated at the same geometric xtar','horizontal_axis':'reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (%)','histogram_weighting':'event counts for both fits','color_scale':'common logarithmic scale across every panel and both cases','color_min':1,'color_max':maxcolor,'binning':[nbx,nby],'ranges':{'ytar_cm':[xmin,xmax],'delta_percent':[ymin,ymax]},'all_events_within_display':True,'full_HCANA_replay':False,'cases':{}}
-+report={'selection':'identical 73989 fitted events (24663 per foil), both methods, before and after','same_input_arrays_and_order_checked':True,'before':'starting matrix evaluated at geometric xtar','after':'emitted new fit matrix evaluated at the same geometric xtar','horizontal_axis':'reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (%)','histogram_weighting':'event counts for both fits','color_scale':'common logarithmic scale across every panel and both cases','color_min':1,'color_max':maxcolor,'binning':[nbx,nby],'ranges':{'ytar_cm':[xmin,xmax],'delta_percent':[ymin,ymax]},'all_events_within_display':True,'full_HCANA_replay':False,'cases':{}}
++report={'selection':f'identical {fit_n} fitted events ({per_foil} per foil), both methods, before and after','same_input_arrays_and_order_checked':True,'before':'starting matrix evaluated at geometric xtar','after':'emitted new fit matrix evaluated at the same geometric xtar','horizontal_axis':'reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (%)','histogram_weighting':'event counts for both fits','color_scale':'common logarithmic scale across every panel and both cases','color_min':1,'color_max':maxcolor,'binning':[nbx,nby],'ranges':{'ytar_cm':[xmin,xmax],'delta_percent':[ymin,ymax]},'all_events_within_display':True,'full_HCANA_replay':False,'cases':{}}
  def draw(case,side,k,label):
   h=hist[case,side,k];ROOT.gPad.SetLogz();h.SetMinimum(1);h.SetMaximum(maxcolor)
   foil='All foils' if k==0 else f'Foil {k-1}, z={[10,0,-10][k-1]:+d} cm'
 diff --git a/run25521/reproduce/prepare.py b/run25521/reproduce/prepare.py
-index 2f11ff3..29e2bed 100644
+index 2f11ff3..1b2d376 100644
 --- a/run25521/reproduce/prepare.py
 +++ b/run25521/reproduce/prepare.py
-@@ -38,7 +38,7 @@ readback=np.max(abs(old+offset-expected),axis=0); assert max(readback)<1e-12
- edges=np.array([-25,-6,-2,2,6,10,22.]); cells=np.zeros((3,6,11),dtype=int); eligible=np.zeros(n,bool); native=np.zeros(n,bool)
+@@ -35,16 +35,15 @@ old=evaluate(repo/'config/base_matrix.dat',check)
+ expected=np.column_stack([a['reco_xptar_rad'],a['reco_ytar_cm']/100,a['reco_yptar_rad']]); offset=np.array([g['xptar_external_offset_rad'],0,g['yptar_external_offset_rad']])
+ readback=np.max(abs(old+offset-expected),axis=0); assert max(readback)<1e-12
+ # Mirror the legacy gate, edges, foil lookup and y-sieve-column lookup in source order.
+-edges=np.array([-25,-6,-2,2,6,10,22.]); cells=np.zeros((3,6,11),dtype=int); eligible=np.zeros(n,bool); native=np.zeros(n,bool)
++edges=np.array([-25,-6,-2,2,6,10,22.]); cells=np.zeros((3,6,11),dtype=int); eligible=np.zeros(n,bool)
  for i in range(n):
   nd=int(np.searchsorted(edges,d[i],side='right')-1); ny=int(a['hole_row'][i])+5; nf=int(a['foil_id'][i])
 - if abs(d[i])<100 and -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and abs(ys[i]-(ny-5)*1.64)<.5:
 + if not a["index_review_required"][i] and abs(d[i])<100 and -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and abs(ys[i]-(ny-5)*1.64)<.5:
    eligible[i]=True
-   if cells[nf,nd,ny]<1000:
-    native[i]=True; cells[nf,nd,ny]+=1
+-  if cells[nf,nd,ny]<1000:
+-   native[i]=True; cells[nf,nd,ny]+=1
+-native_by=[int(np.sum(native&(a['foil_id']==f))) for f in range(3)]; limit=min(native_by)
++  cells[nf,nd,ny]+=1
++eligible_by=[int(np.sum(eligible&(a['foil_id']==f))) for f in range(3)]; limit=min(eligible_by)
+ selected=np.zeros(n,bool)
+-for f in range(3): selected[np.flatnonzero(native&(a['foil_id']==f))[:limit]]=True
++for f in range(3): selected[np.flatnonzero(eligible&(a['foil_id']==f))[:limit]]=True
+ idx=np.flatnonzero(selected)
+ assert len(idx)==3*limit
+ # Same previous-run supplied formula, recomputed on actual fitted population.
+@@ -61,11 +60,11 @@ for name in ['all','balanced']:
+  with uproot.open(path/'Optics_25521_-1_fit_tree_gmm.root') as f:
+   reread=f['TFit'].arrays(library='np')
+   for k in a: assert np.array_equal(reread[k],a[k] if name=='all' else a[k][idx]),k
+-np.savez(work/'selection.npz',indices=idx,eligible=eligible,native=native,weights=w)
+-report={'events':n,'target_geometry_closure_max_cm':closure,'starting_matrix_readback_max_abs_slope_m_slope':readback.tolist(),'confirmed_starting_external_offsets':offset.tolist(),'blocked_hole_counts':blocked,'edges_percent':edges.tolist(),'native_bin_cap':1000,'foil_balancing_limit_derived_from_native_populations':limit,'input_row_order_preserved':True,'fit_events':len(idx),'held_out_events':0,'foil_counts':{},'weight_definition':'w_i=(1/n_cell)/mean(1/n_cell), cells=(foil_id,hole_col,hole_row,floor(delta_percent/1%)); counts recomputed on identical fitted sample; each occupied cell has equal total weight','weight_range':[float(w.min()),float(w.max())],'occupied_weight_cells':len(unique),'selected_delta_sieve_counts':[], 'native_delta_sieve_counts':cells.tolist()}
++np.savez(work/'selection.npz',indices=idx,eligible=eligible,weights=w)
++report={'events':n,'target_geometry_closure_max_cm':closure,'starting_matrix_readback_max_abs_slope_m_slope':readback.tolist(),'confirmed_starting_external_offsets':offset.tolist(),'blocked_hole_counts':blocked,'edges_percent':edges.tolist(),'native_bin_cap':None,'foil_balancing_limit_derived_from_native_populations':limit,'input_row_order_preserved':True,'fit_events':len(idx),'held_out_events':0,'foil_counts':{},'weight_definition':'w_i=(1/n_cell)/mean(1/n_cell), cells=(foil_id,hole_col,hole_row,floor(delta_percent/1%)); counts recomputed on identical fitted sample; each occupied cell has equal total weight','weight_range':[float(w.min()),float(w.max())],'occupied_weight_cells':len(unique),'selected_delta_sieve_counts':[], 'native_delta_sieve_counts':cells.tolist()}
+ for f in range(3):
+  mask=a['foil_id']==f
+- report['foil_counts'][str(f)]={'z_cm':g['foil_z_cm_by_rank'][str(f)],'available':int(mask.sum()),'eligible_before_bin_cap':int(np.sum(eligible&mask)),'native_after_bin_cap':native_by[f],'fitted_each_case':limit,'weight_sum':float(w[a['foil_id'][idx]==f].sum()),'occupied_weight_cells':int(np.sum(unique[:,0]==f))}
++ report['foil_counts'][str(f)]={'z_cm':g['foil_z_cm_by_rank'][str(f)],'available':int(mask.sum()),'eligible_before_foil_balancing':eligible_by[f],'fitted_each_case':limit,'weight_sum':float(w[a['foil_id'][idx]==f].sum()),'occupied_weight_cells':int(np.sum(unique[:,0]==f))}
+ selected_cells=np.zeros_like(cells)
+ for i in idx: selected_cells[int(a['foil_id'][i]),int(np.searchsorted(edges,d[i],side='right')-1),int(a['hole_row'][i])+5]+=1
+ report['selected_delta_sieve_counts']=selected_cells.tolist()
+diff --git a/run25521/reproduce/run.sh b/run25521/reproduce/run.sh
+index f906ab5..504dd13 100644
+--- a/run25521/reproduce/run.sh
++++ b/run25521/reproduce/run.sh
+@@ -9,6 +9,7 @@ work_dir="$(realpath "$2")"
+ hcana_dir="$(realpath "${3:?HCANA source checkout required (no build)}")"
+ cd "$repo_dir"
+ python run25521/reproduce/prepare.py "$source_dir" "$work_dir"
++python run25521/reproduce/audit_selection_order.py "$source_dir" "$work_dir"
+ python run25521/reproduce/adapt_fitter.py
+ fit_count="$(python -c 'import json; print(json.load(open("run25521/selection.json"))["fit_events"])')"
+ for case_name in unweighted weighted; do
 diff --git a/run25521/reproduce/run_nps_legacy.py b/run25521/reproduce/run_nps_legacy.py
-index 1337f1a..6ae2b4e 100644
+index 1337f1a..fd79fe0 100644
 --- a/run25521/reproduce/run_nps_legacy.py
 +++ b/run25521/reproduce/run_nps_legacy.py
-@@ -15,7 +15,7 @@ for case in ['unweighted','weighted']:
+@@ -4,6 +4,8 @@ import sys,subprocess,concurrent.futures,json,re
+ import numpy as np,uproot,fitz
+ from pypdf import PdfReader,PdfWriter
+ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[1]);folder=Path(__file__).resolve().parent/'nps_legacy'
++fit_n = json.loads((out/'selection.json').read_text())['fit_events']
++per_foil = fit_n // 3
+ jobs=[]
+ for case in ['unweighted','weighted']:
+  for side in ['old','new']:
+@@ -15,7 +17,7 @@ for case in ['unweighted','weighted']:
  def run(job):
   case,side,axis,dest,expr=job;log=dest/f'{axis}.log'
   with log.open('w') as stream:subprocess.run(['root','-l','-b','-q',expr],stdout=stream,stderr=subprocess.STDOUT,check=True)
 - text=log.read_text();assert 'start loop 73188' in text and 'Error in <' not in text,(case,side,axis)
-+ text=log.read_text();assert 'start loop 73989' in text and 'Error in <' not in text,(case,side,axis)
++ text=log.read_text();assert f'start loop {fit_n}' in text and 'Error in <' not in text,(case,side,axis)
   print(case,side,axis,'PASS',flush=True)
  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(run,jobs))
  # Add neutral banners using the existing vector-preserving label helper.

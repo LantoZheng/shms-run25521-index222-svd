@@ -11,10 +11,14 @@ def build(left, right, dest):
     dest.mkdir(exist_ok=True, parents=True)
     source = json.loads((left / 'evaluation.json').read_text())
     current = json.loads((right / 'unweighted/fit_report.json').read_text())
-    assert source['evaluated_events'] == 73893 and current['fit_events'] == 73989
+    left_n, right_n = source['evaluated_events'], current['fit_events']
+    for path, n in [(left,left_n), (right,right_n)]:
+        selection = json.loads((path/'selection.json').read_text())
+        assert selection['native_bin_cap'] is None and selection['fit_events'] == n
+        assert all(v['fitted_each_case'] * 3 == n for v in selection['foil_counts'].values())
     sides = [left, right]
     hashes = [hashlib.sha256((p/'unweighted/matrices/nps_shms_newfit_25521_unweighted.dat').read_bytes()).hexdigest() for p in sides]
-    assert hashes == [source['matrix_sha256'], '30a403ad7b61890fb1fb6fdfcda3d6749ea4cbd961108ac430596cb244f40b1d']
+    assert hashes == [source['matrix_sha256'], json.loads((right/'validation.json').read_text())['cases']['unweighted']['matrix_sha256']]
     plots = Path('unweighted/plots')
     new = plots/'new'
     delta = new/'25521_new_delta_vs_ytar.pdf'
@@ -56,8 +60,8 @@ def build(left, right, dest):
                 for k in pages:
                     page = book.new_page(width=1440, height=620)
                     page.insert_text((18,22), f'Run 25521   |   {title}   |   {k+1}/{len(a)}', fontsize=14)
-                    for x, doc, label, pop, color in [(18,a,labels[0],'73,893 evaluated  /  24,631 per foil',(.13,.28,.46)),
-                                                     (728,b,labels[1],'73,989 evaluated  /  24,663 per foil',(.05,.38,.32))]:
+                    for x, doc, label, pop, color in [(18,a,labels[0],f'{left_n:,} evaluated  /  {left_n//3:,} per foil',(.13,.28,.46)),
+                                                     (728,b,labels[1],f'{right_n:,} evaluated  /  {right_n//3:,} per foil',(.05,.38,.32))]:
                         page.insert_text((x,46), label, fontsize=15, color=color)
                         page.insert_text((x,64), pop, fontsize=10, color=color)
                         # Flatten the rotated, offset ROOT CropBox before placing the vector page.
@@ -74,8 +78,8 @@ def build(left, right, dest):
             for page in check:
                 assert len(page.get_xobjects()) >= 2 and all(s in page.get_text() for s in labels)
             counts[name] = len(check)
-    report = dict(left=source, right=dict(clusters=222, matrix_sha256=hashes[1], evaluated_events=73989,
-                  events_per_foil=24663, rmse_xptar_mrad_ytar_mm_yptar_mrad=current['new_at_same_geometric_xtar']['rmse_mrad_mm_mrad']),
+    report = dict(left=source, right=dict(clusters=222, matrix_sha256=hashes[1], evaluated_events=right_n,
+                  events_per_foil=right_n//3, rmse_xptar_mrad_ytar_mm_yptar_mrad=current['new_at_same_geometric_xtar']['rmse_mrad_mm_mrad']),
                   atlas_pages=counts, sections=plots_used)
     (dest/'atlas_sources.json').write_text(json.dumps(report, indent=2)+'\n')
     print(counts)

@@ -3,28 +3,55 @@
   "matched_pdf_pages": 1140,
   "matched_plot_artifacts": 200,
   "rmse_xptar_mrad_ytar_mm_yptar_mrad": {
-    "unweighted_historical": [
-      2.0213048315096165,
-      4.318975988499045,
-      1.5127298001912584
-    ],
     "unweighted_current": [
-      1.0872936655051437,
-      3.264958792324254,
-      1.44785900471109
-    ],
-    "weighted_historical": [
-      2.0874334399313246,
-      4.391511813429518,
-      1.5185766459066092
+      1.1485016413522977,
+      3.6372848762286,
+      1.5440116806774002
     ],
     "weighted_current": [
-      1.0916601548464313,
-      3.303322816247824,
-      1.4536189999314895
+      1.1544954178612192,
+      3.6834587883633927,
+      1.5529775892841657
+    ],
+    "v03_fixed_original_unweighted": [
+      5.037380679484878,
+      4.410977518147399,
+      1.587914382179057
     ]
   },
   "unweighted_complete_atlas_pages": 160,
   "unweighted_highlights_pages": 11,
-  "atlas_sources": "comparison/atlas_sources.json"
+  "atlas_sources": "comparison/atlas_sources.json",
+  "selection": {
+    "cell_event_limit": null,
+    "previous_revision": "16e6494ab21eb01346d898cea3455cf08d643a97",
+    "previous_index222_events": 73989,
+    "v03_events": 92694,
+    "indexed222_events": 92928,
+    "indexed222_largest_selected_cell": 2837,
+    "delta_bins_percent": [
+      [
+        -7,
+        -6
+      ],
+      [
+        -6,
+        -5
+      ],
+      [
+        -5,
+        -4
+      ]
+    ],
+    "previous_bin_events": [
+      2712,
+      4515,
+      4235
+    ],
+    "current_bin_events": [
+      4796,
+      4815,
+      4497
+    ]
+  }
 }

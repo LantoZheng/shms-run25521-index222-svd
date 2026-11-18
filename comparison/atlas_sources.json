@@ -4,23 +4,23 @@
     "matrix_sha256": "5e8ba5d81ba6ae75d8de5e0e50047822e83cd2a186d2dc83201a0df2e07d577c",
     "clusters": 219,
     "available_events": 106058,
-    "evaluated_events": 73893,
-    "events_per_foil": 24631,
+    "evaluated_events": 92694,
+    "events_per_foil": 30898,
     "rmse_xptar_mrad_ytar_mm_yptar_mrad": [
-      4.979018617381728,
-      4.16987807697886,
-      1.4933750556813659
+      5.037380679484878,
+      4.410977518147399,
+      1.587914382179057
     ]
   },
   "right": {
     "clusters": 222,
-    "matrix_sha256": "30a403ad7b61890fb1fb6fdfcda3d6749ea4cbd961108ac430596cb244f40b1d",
-    "evaluated_events": 73989,
-    "events_per_foil": 24663,
+    "matrix_sha256": "4578d049f1ef48c11ceddb0f185ba4f28efe501c17d6c43415ce3ffcba065b52",
+    "evaluated_events": 92928,
+    "events_per_foil": 30976,
     "rmse_xptar_mrad_ytar_mm_yptar_mrad": [
-      1.0872936655051437,
-      3.264958792324254,
-      1.44785900471109
+      1.1485016413522977,
+      3.6372848762286,
+      1.5440116806774002
     ]
   },
   "atlas_pages": {

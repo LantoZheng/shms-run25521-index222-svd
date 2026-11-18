@@ -31,6 +31,7 @@ for name in ['config', 'diagnostics', 'spectrometer_root.h', 'spectrometer_confi
         shutil.copy2(src, work / name)
 scripts = out / 'reproduce'
 shutil.copytree(historical / 'reproduce', scripts)
+shutil.copyfile(repo / 'run25521/reproduce/prepare.py', scripts / 'prepare.py')
 meta = out / 'config/SHMS_run25521'
 meta.mkdir(parents=True)
 matrix = out / 'unweighted/matrices/nps_shms_newfit_25521_unweighted.dat'
@@ -43,10 +44,12 @@ keys = ('run source_full_entry cluster_id foil_id hole_col hole_row fp_x_cm fp_y
 with np.load(release, allow_pickle=False) as src:
     inputs = {key: src[key] for key in keys}
     inputs['z_reco_cm'] = src['z_tar_reco_cm']
+    inputs['index_review_required'] = np.zeros(len(inputs['run']), dtype=bool)
 assert len(np.unique(inputs['cluster_id'])) == 219
 np.savez(work / 'data_1.npz', **inputs)
 subprocess.run([sys.executable, scripts / 'prepare.py', work, work], check=True, cwd=work)
 selection = json.loads((out / 'selection.json').read_text())
+assert selection['native_bin_cap'] is None
 with uproot.open(work / 'SHMS_run25521/balanced/Optics_25521_-1_fit_tree_gmm.root') as file:
     events = file['TFit'].arrays(library='np')
 sys.path.insert(0, str(work / 'diagnostics'))

@@ -1,0 +1,104 @@
+{
+  "source_entries_strictly_increasing": true,
+  "selected_indices_strictly_increasing": true,
+  "balanced_tree_provenance_exactly_matches_selected_source_order": true,
+  "single_pass_eligible_and_foil_balance_scan_exactly_matches_two_stage_preparation": true,
+  "randomization": false,
+  "delta_sorting": false,
+  "foil_cap": 30976,
+  "foil_counts": {
+    "0": {
+      "available": 33990,
+      "eligible": 30976,
+      "fitted": 30976,
+      "removed_by_extra_foil_total_cap": 0,
+      "last_selected_input_row_zero_based": 106056,
+      "last_selected_source_full_entry": 521275,
+      "last_native_source_full_entry": 521275
+    },
+    "1": {
+      "available": 36302,
+      "eligible": 34649,
+      "fitted": 30976,
+      "removed_by_extra_foil_total_cap": 3673,
+      "last_selected_input_row_zero_based": 94780,
+      "last_selected_source_full_entry": 465641,
+      "last_native_source_full_entry": 521268
+    },
+    "2": {
+      "available": 35766,
+      "eligible": 34237,
+      "fitted": 30976,
+      "removed_by_extra_foil_total_cap": 3261,
+      "last_selected_input_row_zero_based": 95905,
+      "last_selected_source_full_entry": 471126,
+      "last_native_source_full_entry": 521281
+    }
+  },
+  "near_minus6_counts": [
+    {
+      "foil": null,
+      "delta_low": -7,
+      "delta_high": -6,
+      "available": 5172,
+      "eligible": 5153,
+      "fitted": 4796
+    },
+    {
+      "foil": null,
+      "delta_low": -6,
+      "delta_high": -5,
+      "available": 5175,
+      "eligible": 5159,
+      "fitted": 4815
+    },
+    {
+      "foil": 0,
+      "delta_low": -7,
+      "delta_high": -6,
+      "available": 1550,
+      "eligible": 1550,
+      "fitted": 1550
+    },
+    {
+      "foil": 0,
+      "delta_low": -6,
+      "delta_high": -5,
+      "available": 1561,
+      "eligible": 1561,
+      "fitted": 1561
+    },
+    {
+      "foil": 1,
+      "delta_low": -7,
+      "delta_high": -6,
+      "available": 1821,
+      "eligible": 1821,
+      "fitted": 1620
+    },
+    {
+      "foil": 1,
+      "delta_low": -6,
+      "delta_high": -5,
+      "available": 1816,
+      "eligible": 1816,
+      "fitted": 1655
+    },
+    {
+      "foil": 2,
+      "delta_low": -7,
+      "delta_high": -6,
+      "available": 1801,
+      "eligible": 1782,
+      "fitted": 1626
+    },
+    {
+      "foil": 2,
+      "delta_low": -6,
+      "delta_high": -5,
+      "available": 1798,
+      "eligible": 1782,
+      "fitted": 1599
+    }
+  ]
+}

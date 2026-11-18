@@ -1,5 +1,5 @@
 {
-  "selection": "identical 73989 fitted events (24663 per foil), both methods, before and after",
+  "selection": "identical 92928 fitted events (30976 per foil), both methods, before and after",
   "same_input_arrays_and_order_checked": true,
   "before": "starting matrix evaluated at geometric xtar",
   "after": "emitted new fit matrix evaluated at the same geometric xtar",
@@ -8,15 +8,15 @@
   "histogram_weighting": "event counts for both fits",
   "color_scale": "common logarithmic scale across every panel and both cases",
   "color_min": 1,
-  "color_max": 56.0,
+  "color_max": 55.0,
   "binning": [
-    216,
+    252,
     148
   ],
   "ranges": {
     "ytar_cm": [
-      -6.0,
-      6.0
+      -7,
+      7
     ],
     "delta_percent": [
       -15.0,
@@ -28,16 +28,16 @@
   "cases": {
     "unweighted": {
       "before_entries": [
-        73989,
-        24663,
-        24663,
-        24663
+        92928,
+        30976,
+        30976,
+        30976
       ],
       "after_entries": [
-        73989,
-        24663,
-        24663,
-        24663
+        92928,
+        30976,
+        30976,
+        30976
       ],
       "pdf_pages": [
         "all foils",
@@ -48,16 +48,16 @@
     },
     "weighted": {
       "before_entries": [
-        73989,
-        24663,
-        24663,
-        24663
+        92928,
+        30976,
+        30976,
+        30976
       ],
       "after_entries": [
-        73989,
-        24663,
-        24663,
-        24663
+        92928,
+        30976,
+        30976,
+        30976
       ],
       "pdf_pages": [
         "all foils",

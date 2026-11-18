@@ -1,6 +1,6 @@
 {
   "description": "Expanded ROOT displays on the existing selected matrix-evaluation inputs, no refit",
-  "fit_events": 73989,
+  "fit_events": 92928,
   "case_side_foil_slices": [
     {
       "case": "unweighted",
@@ -10,7 +10,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 6742,
+      "events": 12632,
       "pdf": "unweighted/plots/old/foil_0_z_plus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -22,7 +22,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5297,
+      "events": 5618,
       "pdf": "unweighted/plots/old/foil_0_z_plus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -34,7 +34,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4587,
+      "events": 4689,
       "pdf": "unweighted/plots/old/foil_0_z_plus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -82,7 +82,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7357,
+      "events": 12814,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -94,7 +94,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5495,
+      "events": 5949,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -106,7 +106,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4271,
+      "events": 4397,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -118,7 +118,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3083,
+      "events": 3203,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -130,7 +130,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2037,
+      "events": 2114,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -142,7 +142,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 2420,
+      "events": 2499,
       "pdf": "unweighted/plots/old/foil_1_z_0/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -154,7 +154,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7037,
+      "events": 12954,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -166,7 +166,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5568,
+      "events": 5863,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -178,7 +178,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 3458,
+      "events": 3492,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -190,7 +190,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3111,
+      "events": 3139,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -202,7 +202,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2457,
+      "events": 2472,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -214,7 +214,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 3032,
+      "events": 3056,
       "pdf": "unweighted/plots/old/foil_2_z_minus10/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -226,7 +226,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 6742,
+      "events": 12632,
       "pdf": "unweighted/plots/new/foil_0_z_plus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -238,7 +238,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5297,
+      "events": 5618,
       "pdf": "unweighted/plots/new/foil_0_z_plus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -250,7 +250,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4587,
+      "events": 4689,
       "pdf": "unweighted/plots/new/foil_0_z_plus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -298,7 +298,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7357,
+      "events": 12814,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -310,7 +310,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5495,
+      "events": 5949,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -322,7 +322,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4271,
+      "events": 4397,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -334,7 +334,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3083,
+      "events": 3203,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -346,7 +346,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2037,
+      "events": 2114,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -358,7 +358,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 2420,
+      "events": 2499,
       "pdf": "unweighted/plots/new/foil_1_z_0/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -370,7 +370,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7037,
+      "events": 12954,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -382,7 +382,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5568,
+      "events": 5863,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -394,7 +394,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 3458,
+      "events": 3492,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -406,7 +406,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3111,
+      "events": 3139,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -418,7 +418,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2457,
+      "events": 2472,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -430,7 +430,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 3032,
+      "events": 3056,
       "pdf": "unweighted/plots/new/foil_2_z_minus10/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -442,7 +442,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 6742,
+      "events": 12632,
       "pdf": "weighted/plots/old/foil_0_z_plus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -454,7 +454,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5297,
+      "events": 5618,
       "pdf": "weighted/plots/old/foil_0_z_plus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -466,7 +466,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4587,
+      "events": 4689,
       "pdf": "weighted/plots/old/foil_0_z_plus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -514,7 +514,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7357,
+      "events": 12814,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -526,7 +526,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5495,
+      "events": 5949,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -538,7 +538,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4271,
+      "events": 4397,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -550,7 +550,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3083,
+      "events": 3203,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -562,7 +562,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2037,
+      "events": 2114,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -574,7 +574,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 2420,
+      "events": 2499,
       "pdf": "weighted/plots/old/foil_1_z_0/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -586,7 +586,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7037,
+      "events": 12954,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -598,7 +598,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5568,
+      "events": 5863,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -610,7 +610,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 3458,
+      "events": 3492,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -622,7 +622,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3111,
+      "events": 3139,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -634,7 +634,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2457,
+      "events": 2472,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -646,7 +646,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 3032,
+      "events": 3056,
       "pdf": "weighted/plots/old/foil_2_z_minus10/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -658,7 +658,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 6742,
+      "events": 12632,
       "pdf": "weighted/plots/new/foil_0_z_plus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -670,7 +670,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5297,
+      "events": 5618,
       "pdf": "weighted/plots/new/foil_0_z_plus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -682,7 +682,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4587,
+      "events": 4689,
       "pdf": "weighted/plots/new/foil_0_z_plus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -730,7 +730,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7357,
+      "events": 12814,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -742,7 +742,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5495,
+      "events": 5949,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -754,7 +754,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 4271,
+      "events": 4397,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -766,7 +766,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3083,
+      "events": 3203,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -778,7 +778,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2037,
+      "events": 2114,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -790,7 +790,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 2420,
+      "events": 2499,
       "pdf": "weighted/plots/new/foil_1_z_0/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     },
@@ -802,7 +802,7 @@
       "delta_low": -15,
       "delta_low_inclusive": false,
       "delta_high_exclusive": -6.0,
-      "events": 7037,
+      "events": 12954,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_00_minus15_to_minus6.pdf",
       "pages": 5
     },
@@ -814,7 +814,7 @@
       "delta_low": -6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": -2.0,
-      "events": 5568,
+      "events": 5863,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_01_minus6_to_minus2.pdf",
       "pages": 5
     },
@@ -826,7 +826,7 @@
       "delta_low": -2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 2.0,
-      "events": 3458,
+      "events": 3492,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_02_minus2_to_plus2.pdf",
       "pages": 5
     },
@@ -838,7 +838,7 @@
       "delta_low": 2.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 6.0,
-      "events": 3111,
+      "events": 3139,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_03_plus2_to_plus6.pdf",
       "pages": 5
     },
@@ -850,7 +850,7 @@
       "delta_low": 6.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 10.0,
-      "events": 2457,
+      "events": 2472,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_04_plus6_to_plus10.pdf",
       "pages": 5
     },
@@ -862,7 +862,7 @@
       "delta_low": 10.0,
       "delta_low_inclusive": true,
       "delta_high_exclusive": 22.0,
-      "events": 3032,
+      "events": 3056,
       "pdf": "weighted/plots/new/foil_2_z_minus10/delta_05_plus10_to_plus22.pdf",
       "pages": 5
     }
