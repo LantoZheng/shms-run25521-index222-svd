@@ -24,6 +24,7 @@
       1.4536189999314895
     ]
   },
-  "unweighted_complete_atlas_pages": 325,
-  "unweighted_highlights_pages": 12
+  "unweighted_complete_atlas_pages": 160,
+  "unweighted_highlights_pages": 11,
+  "atlas_sources": "comparison/atlas_sources.json"
 }

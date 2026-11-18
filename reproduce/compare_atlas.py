@@ -1,37 +1,85 @@
+"""Pair the fixed-matrix v0.3 evaluation with the indexed-222 unweighted evaluation."""
+import hashlib
+import json
 from pathlib import Path
-import json,sys,shutil,hashlib,csv
+import sys
+
 import fitz
-def build(historical,current,dest):
- dest.mkdir(exist_ok=True,parents=True)
- def match(rel):
-  return historical/rel,current/rel
- def add(book,toc,rel,title,nums=None):
-  left,right=match(rel)
-  with fitz.open(left) as a,fitz.open(right) as b:
-   assert len(a)==len(b),(rel,len(a),len(b))
-   numbers=list(range(len(a))) if nums is None else nums
-   toc.append([1,title,len(book)+1])
-   for k in numbers:
-    page=book.new_page(width=1200,height=500);page.insert_text((22,23),title+'   |   '+str(k+1)+' / '+str(len(a)),fontsize=14)
-    for t,source,xpos in [('Published Run 25521',a,18),('Current 222-cluster indexing',b,608)]:
-     page.insert_text((xpos,43),t,fontsize=11,color=(.10,.31,.43));page.show_pdf_page(fitz.Rect(xpos,51,xpos+568,477),source,k)
-    page.insert_text((20,492),'Unweighted Run 25521. Each panel retains its native axes, scale and fitted population. Historical: 73,188; current: 73,989. Available-event delta panels use 106,058.',fontsize=7)
- rels=[('plots/25521_available_delta_histograms.pdf','Available delta distributions'),('plots/25521_delta_histograms.pdf','Fitted delta distributions'),('unweighted/plots/comparison/25521_delta_vs_ytar_before_after.pdf','Starting and fitted matrices: delta versus ytar')]
- for side in ['old','new']:
-  folder=current/f'unweighted/plots/{side}'
-  rels.append((f'unweighted/plots/fit_opt_matrix_25521_unweighted_{side}_matrix_diff.pdf',f'{side.title()} matrix: automatic summary'))
-  for path in sorted(folder.glob('*.pdf')):rels.append((str(path.relative_to(current)),side+' / '+path.stem))
-  for path in sorted((folder/'nps_legacy').glob('*.pdf')):
-   if not path.name.startswith('foil_'):rels.append((str(path.relative_to(current)),side+' / NPS / '+path.stem))
-  for path in sorted(folder.glob('foil_*/all_delta_slices.pdf')):rels.append((str(path.relative_to(current)),side+' / '+path.parent.name+' / six delta slices'))
- book=fitz.open();toc=[]
- for rel,name in rels:add(book,toc,rel,name)
- book.set_toc(toc);book.save(dest/'unweighted_complete_atlas.pdf',garbage=4,deflate=True);book.close()
- quick=fitz.open();toc=[]
- for rel,name in rels[:3]:add(quick,toc,rel,name)
- for f,foil in enumerate(['foil_0_z_plus10','foil_1_z_0','foil_2_z_minus10']):
-  add(quick,toc,f'unweighted/plots/new/{foil}/delta_04_plus6_to_plus10.pdf',foil+' / 6 <= delta < 10 / sieve and three residuals',[4])
-  add(quick,toc,'unweighted/plots/new/nps_legacy/25521_new_xpdiff.pdf',foil+' / 6 <= delta < 10 / xptar residual by hole',[f*6+4])
- quick.set_toc(toc);quick.save(dest/'unweighted_highlights.pdf',garbage=4,deflate=True)
- print('atlases',len(quick),len(rels))
-if __name__=='__main__':build(*(Path(s).resolve() for s in sys.argv[1:]))
+
+
+def build(left, right, dest):
+    dest.mkdir(exist_ok=True, parents=True)
+    source = json.loads((left / 'evaluation.json').read_text())
+    current = json.loads((right / 'unweighted/fit_report.json').read_text())
+    assert source['evaluated_events'] == 73893 and current['fit_events'] == 73989
+    sides = [left, right]
+    hashes = [hashlib.sha256((p/'unweighted/matrices/nps_shms_newfit_25521_unweighted.dat').read_bytes()).hexdigest() for p in sides]
+    assert hashes == [source['matrix_sha256'], '30a403ad7b61890fb1fb6fdfcda3d6749ea4cbd961108ac430596cb244f40b1d']
+    plots = Path('unweighted/plots')
+    new = plots/'new'
+    delta = new/'25521_new_delta_vs_ytar.pdf'
+    summary = plots/'fit_opt_matrix_25521_unweighted_new_matrix_diff.pdf'
+    foils = ['foil_0_z_plus10', 'foil_1_z_0', 'foil_2_z_minus10']
+    full = [(delta, 'Reconstructed Ytar versus momentum deviation', None),
+            (summary, 'Target residuals | Gaussian fits', None)]
+    for pdf in sorted((right/new).glob('*.pdf')):
+        if pdf.name != delta.name:
+            full.append((new/pdf.name, pdf.stem.removeprefix('25521_new_').replace('_', ' '), None))
+    for pdf in sorted((right/new/'nps_legacy').glob('25521*.pdf')):
+        full.append((new/'nps_legacy'/pdf.name, 'NPS | '+pdf.stem.removeprefix('25521_new_').replace('_', ' '), None))
+    quick = full[:2].copy()
+    intervals = ['(-15, -6)', '[-6, -2)', '[-2, 2)', '[2, 6)', '[6, 10)', '[10, 22)']
+    for i, foil in enumerate(foils):
+        files = sorted((right/new/foil).glob('delta_*.pdf'))
+        assert len(files) == 6
+        for j, pdf in enumerate(files):
+            title = f'Foil {i} | delta {intervals[j]}%'
+            full.append((new/foil/pdf.name, title, None))
+            if j == 4:
+                quick.extend([(new/foil/pdf.name, title+' | target residuals', [0]),
+                              (new/foil/pdf.name, title+' | sieve reprojection', [4]),
+                              (new/'nps_legacy/25521_new_xpdiff.pdf', title+' | Xptar by hole', [6*i+j])])
+    labels = ['v0.3 clusters  /  original repository unweighted new matrix',
+              '222 indexed clusters  /  unweighted SVD fitted to the updated data']
+    plots_used = []
+    counts = {}
+    for name, sections in [('unweighted_complete_atlas', full), ('unweighted_highlights', quick)]:
+        book = fitz.open()
+        toc = []
+        for rel, title, indices in sections:
+            with fitz.open(left/rel) as a, fitz.open(right/rel) as b:
+                assert len(a) == len(b) and len(a) > 0, rel
+                pages = range(len(a)) if indices is None else indices
+                toc.append([1, title, len(book)+1])
+                if name == 'unweighted_complete_atlas':
+                    plots_used.append(dict(source=rel.as_posix(), pages=len(a), first_atlas_page=len(book)+1))
+                for k in pages:
+                    page = book.new_page(width=1440, height=620)
+                    page.insert_text((18,22), f'Run 25521   |   {title}   |   {k+1}/{len(a)}', fontsize=14)
+                    for x, doc, label, pop, color in [(18,a,labels[0],'73,893 evaluated  /  24,631 per foil',(.13,.28,.46)),
+                                                     (728,b,labels[1],'73,989 evaluated  /  24,663 per foil',(.05,.38,.32))]:
+                        page.insert_text((x,46), label, fontsize=15, color=color)
+                        page.insert_text((x,64), pop, fontsize=10, color=color)
+                        # Flatten the rotated, offset ROOT CropBox before placing the vector page.
+                        with fitz.open('pdf', doc.convert_to_pdf(from_page=k, to_page=k)) as visible:
+                            page.show_pdf_page(fitz.Rect(x,73,x+692,596), visible, 0)
+                    page.insert_text((18,612), 'Each panel uses its own foil/hole targets and selected events. Native axis ranges and color scales are retained.', fontsize=9)
+        book.set_toc(toc)
+        book.set_metadata({'title':'Run 25521 | v0.3 and indexed-222 unweighted matrix comparison'})
+        file = dest/(name+'.pdf')
+        book.save(file, garbage=4, deflate=True)
+        book.close()
+        with fitz.open(file) as check:
+            assert len(check.get_toc()) == len(sections)
+            for page in check:
+                assert len(page.get_xobjects()) >= 2 and all(s in page.get_text() for s in labels)
+            counts[name] = len(check)
+    report = dict(left=source, right=dict(clusters=222, matrix_sha256=hashes[1], evaluated_events=73989,
+                  events_per_foil=24663, rmse_xptar_mrad_ytar_mm_yptar_mrad=current['new_at_same_geometric_xtar']['rmse_mrad_mm_mrad']),
+                  atlas_pages=counts, sections=plots_used)
+    (dest/'atlas_sources.json').write_text(json.dumps(report, indent=2)+'\n')
+    print(counts)
+
+
+if __name__ == '__main__':
+    build(*(Path(arg).resolve() for arg in sys.argv[1:]))

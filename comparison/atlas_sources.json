@@ -1,0 +1,202 @@
+{
+  "left": {
+    "source_sha256": "de16b6577a8ef2b08d0659f91a455267c624de7486043eb928f9d532c2c6d9ff",
+    "matrix_sha256": "5e8ba5d81ba6ae75d8de5e0e50047822e83cd2a186d2dc83201a0df2e07d577c",
+    "clusters": 219,
+    "available_events": 106058,
+    "evaluated_events": 73893,
+    "events_per_foil": 24631,
+    "rmse_xptar_mrad_ytar_mm_yptar_mrad": [
+      4.979018617381728,
+      4.16987807697886,
+      1.4933750556813659
+    ]
+  },
+  "right": {
+    "clusters": 222,
+    "matrix_sha256": "30a403ad7b61890fb1fb6fdfcda3d6749ea4cbd961108ac430596cb244f40b1d",
+    "evaluated_events": 73989,
+    "events_per_foil": 24663,
+    "rmse_xptar_mrad_ytar_mm_yptar_mrad": [
+      1.0872936655051437,
+      3.264958792324254,
+      1.44785900471109
+    ]
+  },
+  "atlas_pages": {
+    "unweighted_complete_atlas": 160,
+    "unweighted_highlights": 11
+  },
+  "sections": [
+    {
+      "source": "unweighted/plots/new/25521_new_delta_vs_ytar.pdf",
+      "pages": 1,
+      "first_atlas_page": 1
+    },
+    {
+      "source": "unweighted/plots/fit_opt_matrix_25521_unweighted_new_matrix_diff.pdf",
+      "pages": 1,
+      "first_atlas_page": 2
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_xptar_residuals.pdf",
+      "pages": 18,
+      "first_atlas_page": 3
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_xptar_residuals_by_sieve.pdf",
+      "pages": 3,
+      "first_atlas_page": 21
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_yptar_residuals.pdf",
+      "pages": 3,
+      "first_atlas_page": 24
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_yptar_residuals_by_sieve.pdf",
+      "pages": 3,
+      "first_atlas_page": 27
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_ytar_residuals.pdf",
+      "pages": 3,
+      "first_atlas_page": 30
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_ytar_residuals_by_sieve.pdf",
+      "pages": 3,
+      "first_atlas_page": 33
+    },
+    {
+      "source": "unweighted/plots/new/25521_new_ytar_residuals_delta.pdf",
+      "pages": 1,
+      "first_atlas_page": 36
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_xpdiff.pdf",
+      "pages": 18,
+      "first_atlas_page": 37
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_xpdiff_xs.pdf",
+      "pages": 3,
+      "first_atlas_page": 55
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_ydiff.pdf",
+      "pages": 3,
+      "first_atlas_page": 58
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_ydiff_delta.pdf",
+      "pages": 1,
+      "first_atlas_page": 61
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_ydiff_xs.pdf",
+      "pages": 3,
+      "first_atlas_page": 62
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_ypdiff.pdf",
+      "pages": 3,
+      "first_atlas_page": 65
+    },
+    {
+      "source": "unweighted/plots/new/nps_legacy/25521_new_ypdiff_ys.pdf",
+      "pages": 3,
+      "first_atlas_page": 68
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_00_minus15_to_minus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 71
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_01_minus6_to_minus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 76
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_02_minus2_to_plus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 81
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_03_plus2_to_plus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 86
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_04_plus6_to_plus10.pdf",
+      "pages": 5,
+      "first_atlas_page": 91
+    },
+    {
+      "source": "unweighted/plots/new/foil_0_z_plus10/delta_05_plus10_to_plus22.pdf",
+      "pages": 5,
+      "first_atlas_page": 96
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_00_minus15_to_minus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 101
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_01_minus6_to_minus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 106
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_02_minus2_to_plus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 111
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_03_plus2_to_plus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 116
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_04_plus6_to_plus10.pdf",
+      "pages": 5,
+      "first_atlas_page": 121
+    },
+    {
+      "source": "unweighted/plots/new/foil_1_z_0/delta_05_plus10_to_plus22.pdf",
+      "pages": 5,
+      "first_atlas_page": 126
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_00_minus15_to_minus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 131
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_01_minus6_to_minus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 136
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_02_minus2_to_plus2.pdf",
+      "pages": 5,
+      "first_atlas_page": 141
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_03_plus2_to_plus6.pdf",
+      "pages": 5,
+      "first_atlas_page": 146
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_04_plus6_to_plus10.pdf",
+      "pages": 5,
+      "first_atlas_page": 151
+    },
+    {
+      "source": "unweighted/plots/new/foil_2_z_minus10/delta_05_plus10_to_plus22.pdf",
+      "pages": 5,
+      "first_atlas_page": 156
+    }
+  ]
+}
