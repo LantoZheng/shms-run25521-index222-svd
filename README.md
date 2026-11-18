@@ -18,6 +18,11 @@ The largest indexed-222 cell contributes 2,837 fitted events. In the adjacent de
 
 ## Figures and data
 
+**[Foil and sieve diagnostics: 27-page side-by-side atlas](comparison/foil_diagnostics_comparison.pdf).** Left: v0.3 events with the original repository's emitted unweighted matrix. Right: indexed-222 events with its uncapped unweighted matrix. Pages 1–21 use 106,058 v0.3 events and 105,911 resolved indexed-222 events, including events outside the fit momentum window. Pages 22–27 show cluster membership, with provisional C199 included in the indexed-222 overview and labeled maps. The two main matrices reproduce the release RMSE on their respective selected samples. Page 5 and dashed trend lines use separate five-fold, unweighted diagnostic refits for each indexing, with physical holes grouped across foils and siblings kept together. The auxiliary fits use a direct design-matrix SVD with a relative cutoff equal to the square root of double-precision machine epsilon. These holdouts assess consistency with the assigned geometry. [Page index and numeric checks](comparison/foil_diagnostics_index.json).
+
+To rebuild this atlas, run [foil_diagnostics.py](reproduce/foil_diagnostics.py) with the v0.3 NPZ, indexed-222 NPZ and original unweighted matrix path, in that order. It reads the right-hand matrix and geometry from this repository. It requires NumPy, pandas, SciPy, scikit-learn, threadpoolctl, Matplotlib and contourpy.
+
+
 - [Unweighted replay matrix](run25521/unweighted/matrices/nps_shms_newfit_25521_unweighted.dat), [fit report](run25521/unweighted/fit_report.json), [starting versus fitted delta–ytar](run25521/unweighted/plots/comparison/25521_delta_vs_ytar_before_after.pdf), [all unweighted plots](run25521/unweighted/plots)
 - [Weighted replay matrix](run25521/weighted/matrices/nps_shms_newfit_25521_weighted.dat), [fit report](run25521/weighted/fit_report.json), [all weighted plots](run25521/weighted/plots)
 - [Foil and momentum slice index](run25521/DIAGNOSTICS.md), [NPS legacy diagnostics](run25521/NPS_LEGACY_DIAGNOSTICS.md), [available-event delta](run25521/plots/25521_available_delta_histograms.pdf), [selected-event delta](run25521/plots/25521_delta_histograms.pdf)

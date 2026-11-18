@@ -1,0 +1,171 @@
+{
+  "matrix_checks": [
+    {
+      "matrix_sha256": "5e8ba5d81ba6ae75d8de5e0e50047822e83cd2a186d2dc83201a0df2e07d577c",
+      "data_sha256": "de16b6577a8ef2b08d0659f91a455267c624de7486043eb928f9d532c2c6d9ff",
+      "selected": 92694,
+      "indexed": 106058,
+      "used_for_residuals": 106058,
+      "outside_fit_window": 6049,
+      "rmse": [
+        5.037380679484878,
+        4.410977518147403,
+        1.5879143821790571
+      ],
+      "ytar_by_foil": [
+        {
+          "foil": 0,
+          "events": 33912,
+          "bias_mm": 1.1112580207784388,
+          "sd_mm": 4.992550587870376
+        },
+        {
+          "foil": 1,
+          "events": 36425,
+          "bias_mm": 0.8261452405179409,
+          "sd_mm": 4.951619714175368
+        },
+        {
+          "foil": 2,
+          "events": 35721,
+          "bias_mm": -1.14114778922605,
+          "sd_mm": 4.4730796680225
+        }
+      ]
+    },
+    {
+      "matrix_sha256": "4578d049f1ef48c11ceddb0f185ba4f28efe501c17d6c43415ce3ffcba065b52",
+      "data_sha256": "9aa07f6e671d6698062109b8a7d91fbf4808f67c0fc79414e4657f10500603b0",
+      "selected": 92928,
+      "indexed": 106058,
+      "used_for_residuals": 105911,
+      "outside_fit_window": 6049,
+      "rmse": [
+        1.1485016413522984,
+        3.6372848762286005,
+        1.5440116806774005
+      ],
+      "ytar_by_foil": [
+        {
+          "foil": 0,
+          "events": 33990,
+          "bias_mm": 0.9195416151897654,
+          "sd_mm": 4.609241759706666
+        },
+        {
+          "foil": 1,
+          "events": 36302,
+          "bias_mm": -0.05801052527084953,
+          "sd_mm": 3.884848207967701
+        },
+        {
+          "foil": 2,
+          "events": 35619,
+          "bias_mm": -1.038947495780061,
+          "sd_mm": 3.968779550881905
+        }
+      ]
+    }
+  ],
+  "cross_validation": [
+    {
+      "side": 0,
+      "fold": 1,
+      "training": 69930,
+      "evaluated": 21177,
+      "rank": 94
+    },
+    {
+      "side": 0,
+      "fold": 2,
+      "training": 74925,
+      "evaluated": 21270,
+      "rank": 94
+    },
+    {
+      "side": 0,
+      "fold": 3,
+      "training": 77400,
+      "evaluated": 21254,
+      "rank": 93
+    },
+    {
+      "side": 0,
+      "fold": 4,
+      "training": 70470,
+      "evaluated": 21184,
+      "rank": 94
+    },
+    {
+      "side": 0,
+      "fold": 5,
+      "training": 78051,
+      "evaluated": 21173,
+      "rank": 94
+    },
+    {
+      "side": 1,
+      "fold": 1,
+      "training": 74658,
+      "evaluated": 21230,
+      "rank": 94
+    },
+    {
+      "side": 1,
+      "fold": 2,
+      "training": 74754,
+      "evaluated": 21126,
+      "rank": 94
+    },
+    {
+      "side": 1,
+      "fold": 3,
+      "training": 72534,
+      "evaluated": 21189,
+      "rank": 94
+    },
+    {
+      "side": 1,
+      "fold": 4,
+      "training": 75099,
+      "evaluated": 21199,
+      "rank": 93
+    },
+    {
+      "side": 1,
+      "fold": 5,
+      "training": 74667,
+      "evaluated": 21167,
+      "rank": 93
+    }
+  ],
+  "pages": [
+    "Reconstructed and geometric target Y by foil",
+    "Target Y residual by foil",
+    "Target Y bias and spread by assigned hole",
+    "Target Y bias and spread on the reconstructed sieve",
+    "Held-hole cross-validation of target Y",
+    "Sieve y residual by sieve row",
+    "Sieve x residual by sieve column",
+    "Target y residual by sieve row",
+    "Target y residual by sieve column",
+    "Reprojection on the sieve",
+    "Intersection with the foil plane",
+    "Foil intersection relative to the event beam position",
+    "Target y residual by momentum deviation",
+    "Foil 0  (+10 cm)  |  Sieve residuals for each row",
+    "Foil 1  (0 cm)  |  Sieve residuals for each row",
+    "Foil 2  (-10 cm)  |  Sieve residuals for each row",
+    "Foil 0  (+10 cm)  |  Sieve residuals for each column",
+    "Foil 1  (0 cm)  |  Sieve residuals for each column",
+    "Foil 2  (-10 cm)  |  Sieve residuals for each column",
+    "The three reconstructed target Y peaks",
+    "Foil 0, column -5  |  Momentum dependence of the sieve X residual",
+    "Sieve hit densities and cluster boundaries",
+    "Three focal-plane cluster splits",
+    "Cluster centers and their assigned holes",
+    "Indexed cluster map  |  Foil 0  (+10 cm)",
+    "Indexed cluster map  |  Foil 1  (0 cm)",
+    "Indexed cluster map  |  Foil 2  (-10 cm)"
+  ]
+}
