@@ -1,0 +1,139 @@
+diff --git a/run25521/reproduce/audit_selection_order.py b/run25521/reproduce/audit_selection_order.py
+index 2e899aa..7c5c9d9 100644
+--- a/run25521/reproduce/audit_selection_order.py
++++ b/run25521/reproduce/audit_selection_order.py
+@@ -5,7 +5,7 @@ import numpy as np,uproot
+ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';source=Path(sys.argv[1]);work=Path(sys.argv[2])
+ loaded=np.load(source/'data_1.npz',allow_pickle=False);p={k:loaded[k] for k in loaded.files};s=np.load(work/'selection.npz');n=len(p['run']);idx=s['indices'];d=p['delta_percent'];foil=p['foil_id'];entry=p['source_full_entry'];eligible=s['eligible'];native=s['native'];selected=np.zeros(n,bool);selected[idx]=True
+ assert np.all(np.diff(entry)>0) and np.all(np.diff(idx)>0)
+-limit=24396;edges=np.array([-25.,-6.,-2.,2.,6.,10.,22.]);cells=np.zeros((3,6,11),int);totals=np.zeros(3,int);singlepass=[]
++limit=24663;edges=np.array([-25.,-6.,-2.,2.,6.,10.,22.]);cells=np.zeros((3,6,11),int);totals=np.zeros(3,int);singlepass=[]
+ for i in range(n):
+  nf=int(foil[i]);nd=np.searchsorted(edges,d[i],side='right')-1;ny=int(p['hole_row'][i])+5
+  if -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and cells[nf,nd,ny]<1000 and totals[nf]<limit:
+diff --git a/run25521/reproduce/foil_slice_diagnostics.py b/run25521/reproduce/foil_slice_diagnostics.py
+index 93de0cf..f633329 100644
+--- a/run25521/reproduce/foil_slice_diagnostics.py
++++ b/run25521/reproduce/foil_slice_diagnostics.py
+@@ -92,7 +92,7 @@ for case in ['unweighted','weighted']:
+  for side in ['old','new']:
+   records=[r for r in report['case_side_foil_slices'] if r['case']==case and r['side']==side]
+   assert len(records)==18 and sum(r['events'] for r in records)==sel['fit_events']
+-  assert all(sum(r['events'] for r in records if r['foil_id']==f)==24396 for f in range(3))
++  assert all(sum(r['events'] for r in records if r['foil_id']==f)==24663 for f in range(3))
+ with (out/'foil_slice_metrics.csv').open('w') as stream:
+  writer=csv.DictWriter(stream,fieldnames=list(metrics[0]),lineterminator='\n');writer.writeheader();writer.writerows(metrics)
+ (out/'foil_slice_validation.json').write_text(json.dumps(report,indent=2)+'\n')
+diff --git a/run25521/reproduce/index_foil_slices.py b/run25521/reproduce/index_foil_slices.py
+index 98992a2..644fa18 100644
+--- a/run25521/reproduce/index_foil_slices.py
++++ b/run25521/reproduce/index_foil_slices.py
+@@ -5,7 +5,7 @@ out=Path(__file__).resolve().parents[1]; records=json.loads((out/'foil_slice_val
+ zs=[10,0,-10]; folders=['foil_0_z_plus10','foil_1_z_0','foil_2_z_minus10']
+ lines=['# Run 25521 diagnostics: choose a foil, then a delta slice','',
+ 'For the exact requested historical views, start with [NPS_HMS_OPTICS legacy macro reports](NPS_LEGACY_DIAGNOSTICS.md). These expanded distributions are supplemental. The original summary PDFs combine foils. **Use the links below for the actual foil-by-foil inspection.** Each foil report contains six delta slices, in increasing delta order; its PDF bookmarks select a slice. Each slice has five pages, described below.','',
+-'All views use the identical 73,188 fitted events (24,396 per foil), with matching old/new matrix inputs. There has been no refit or change to any matrix.','',
++'All views use the identical 73,989 fitted events (24,663 per foil), with matching old/new matrix inputs. There has been no refit or change to any matrix.','',
+ '## One report per foil','',
+ '| Method | Foil label / z | Old matrix (30 pages) | New matrix (30 pages) |','|---|---|---|---|']
+ for case,label in [('unweighted','Unweighted legacy fit'),('weighted','Supplied weights')]:
+diff --git a/run25521/reproduce/plot_available_delta_histograms.py b/run25521/reproduce/plot_available_delta_histograms.py
+index 21536bd..eed8fe9 100644
+--- a/run25521/reproduce/plot_available_delta_histograms.py
++++ b/run25521/reproduce/plot_available_delta_histograms.py
+@@ -13,7 +13,7 @@ edges=np.arange(-20.,35.);hist=[];rows=[];report={'selection':'all 106058 events
+ for k,z in enumerate([None,10,0,-10]):
+  mask=np.ones(len(a['delta']),bool) if z is None else a['ztarT']==z
+  values=a['delta'][mask];counts,_=np.histogram(values,bins=edges)
+- assert int(counts.sum())==len(values)==[106058,34429,33216,38413][k]
++ assert int(counts.sum())==len(values)==[106058,33990,36302,35766][k]
+  title='All three foils' if z is None else f'Foil {k-1}: z={z:+d} cm'
+  h=ROOT.TH1D('delta_'+str(k),f'{title}, N={len(values)};Delta (%);Events / 1% bin',54,-20,34);h.SetDirectory(0)
+  for value in values:h.Fill(float(value))
+diff --git a/run25521/reproduce/plot_delta_histograms.py b/run25521/reproduce/plot_delta_histograms.py
+index 69618b6..c56524e 100644
+--- a/run25521/reproduce/plot_delta_histograms.py
++++ b/run25521/reproduce/plot_delta_histograms.py
+@@ -14,7 +14,7 @@ edges=np.arange(-15.,23.);hist=[];rows=[];report={'selection':'shared fitted eve
+ for k,z in enumerate([None,10,0,-10]):
+  mask=np.ones(len(a['delta']),bool) if z is None else a['ztarT']==z
+  values=a['delta'][mask];counts,_=np.histogram(values,bins=edges)
+- assert int(counts.sum())==len(values)==(73188 if z is None else 24396)
++ assert int(counts.sum())==len(values)==(73989 if z is None else 24663)
+  title='All three foils' if z is None else f'Foil {k-1}: z={z:+d} cm'
+  h=ROOT.TH1D('delta_'+str(k),f'{title}, N={len(values)};Delta (%);Events / 1% bin',37,-15,22);h.SetDirectory(0)
+  for value in values:h.Fill(float(value))
+diff --git a/run25521/reproduce/plot_delta_vs_ytar.py b/run25521/reproduce/plot_delta_vs_ytar.py
+index 381a8aa..e143612 100644
+--- a/run25521/reproduce/plot_delta_vs_ytar.py
++++ b/run25521/reproduce/plot_delta_vs_ytar.py
+@@ -6,7 +6,7 @@ repo=Path(__file__).resolve().parents[2];out=repo/'run25521';work=Path(sys.argv[
+ ROOT.gROOT.SetBatch(True);ROOT.gStyle.SetOptStat(0);ROOT.gStyle.SetPalette(ROOT.kBird)
+ ROOT.gStyle.SetPadLeftMargin(.12);ROOT.gStyle.SetPadRightMargin(.15)
+ ROOT.gStyle.SetTitleFontSize(.045)
+-report={'horizontal_axis':'new-matrix reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (percent), unchanged by angular fit','event_count_histograms':True,'logarithmic_color':True,'selection':'same 73188 fitted events, 24396 per foil','new_full_replay':False,'cases':{}}
++report={'horizontal_axis':'new-matrix reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (percent), unchanged by angular fit','event_count_histograms':True,'logarithmic_color':True,'selection':'same 73989 fitted events, 24663 per foil','new_full_replay':False,'cases':{}}
+ arrays={}
+ for case in ['unweighted','weighted']:
+  with uproot.open(work/'SHMS_run25521'/f'{case}_new.root') as f:arrays[case]=f['TFit'].arrays(['ytar','delta','ztarT'],library='np')
+@@ -19,7 +19,7 @@ for case in arrays:
+   mask=np.ones(len(a['ytar']),bool) if z is None else a['ztarT']==z
+   h=ROOT.TH2D(f'{case}_{"all" if z is None else str(z)}','',180,-5,5,148,-15,22);h.SetDirectory(0)
+   for x,y in zip(a['ytar'][mask],a['delta'][mask]):h.Fill(float(x),float(y))
+-  assert int(h.GetEntries())==(73188 if z is None else 24396)
++  assert int(h.GetEntries())==(73989 if z is None else 24663)
+   assert h.Integral()==h.GetEntries() # no events hidden outside plotted ranges
+   hist.append(h);keep.append(h)
+  allhist[case]=hist
+diff --git a/run25521/reproduce/plot_delta_vs_ytar_comparison.py b/run25521/reproduce/plot_delta_vs_ytar_comparison.py
+index 723784f..c392d07 100644
+--- a/run25521/reproduce/plot_delta_vs_ytar_comparison.py
++++ b/run25521/reproduce/plot_delta_vs_ytar_comparison.py
+@@ -13,18 +13,18 @@ for case in ['unweighted','weighted']:
+ for key,a in arrays.items():
+  for field in fields:
+   if field!='ytar':assert np.array_equal(a[field],arrays['unweighted','old'][field]),(key,field)
+- assert len(a['ytar'])==73188
++ assert len(a['ytar'])==73989
+ xmin,xmax=-6.,6.;ymin,ymax=-15.,22.;nbx,nby=216,148
+ for (case,side),a in arrays.items():
+  for k,z in enumerate([None,10,0,-10]):
+   mask=np.ones(len(a['ytar']),bool) if z is None else a['ztarT']==z
+   h=ROOT.TH2D(f'{case}_{side}_{k}','',nbx,xmin,xmax,nby,ymin,ymax);h.SetDirectory(0)
+   for x,y in zip(a['ytar'][mask],a['delta'][mask]):h.Fill(float(x),float(y))
+-  assert int(h.GetEntries())==(73188 if z is None else 24396)
++  assert int(h.GetEntries())==(73989 if z is None else 24663)
+   assert h.Integral()==h.GetEntries()
+   hist[case,side,k]=h;keep.append(h)
+ maxcolor=float(max(h.GetMaximum() for h in hist.values()))
+-report={'selection':'identical 73188 fitted events (24396 per foil), both methods, before and after','same_input_arrays_and_order_checked':True,'before':'starting matrix evaluated at geometric xtar','after':'emitted new fit matrix evaluated at the same geometric xtar','horizontal_axis':'reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (%)','histogram_weighting':'event counts for both fits','color_scale':'common logarithmic scale across every panel and both cases','color_min':1,'color_max':maxcolor,'binning':[nbx,nby],'ranges':{'ytar_cm':[xmin,xmax],'delta_percent':[ymin,ymax]},'all_events_within_display':True,'full_HCANA_replay':False,'cases':{}}
++report={'selection':'identical 73989 fitted events (24663 per foil), both methods, before and after','same_input_arrays_and_order_checked':True,'before':'starting matrix evaluated at geometric xtar','after':'emitted new fit matrix evaluated at the same geometric xtar','horizontal_axis':'reconstructed ytar (cm)','vertical_axis':'experimental reconstructed delta (%)','histogram_weighting':'event counts for both fits','color_scale':'common logarithmic scale across every panel and both cases','color_min':1,'color_max':maxcolor,'binning':[nbx,nby],'ranges':{'ytar_cm':[xmin,xmax],'delta_percent':[ymin,ymax]},'all_events_within_display':True,'full_HCANA_replay':False,'cases':{}}
+ def draw(case,side,k,label):
+  h=hist[case,side,k];ROOT.gPad.SetLogz();h.SetMinimum(1);h.SetMaximum(maxcolor)
+  foil='All foils' if k==0 else f'Foil {k-1}, z={[10,0,-10][k-1]:+d} cm'
+diff --git a/run25521/reproduce/prepare.py b/run25521/reproduce/prepare.py
+index 2f11ff3..29e2bed 100644
+--- a/run25521/reproduce/prepare.py
++++ b/run25521/reproduce/prepare.py
+@@ -38,7 +38,7 @@ readback=np.max(abs(old+offset-expected),axis=0); assert max(readback)<1e-12
+ edges=np.array([-25,-6,-2,2,6,10,22.]); cells=np.zeros((3,6,11),dtype=int); eligible=np.zeros(n,bool); native=np.zeros(n,bool)
+ for i in range(n):
+  nd=int(np.searchsorted(edges,d[i],side='right')-1); ny=int(a['hole_row'][i])+5; nf=int(a['foil_id'][i])
+- if abs(d[i])<100 and -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and abs(ys[i]-(ny-5)*1.64)<.5:
++ if not a["index_review_required"][i] and abs(d[i])<100 and -15<d[i]<30 and 0<=nd<6 and 0<=ny<11 and abs(ys[i]-(ny-5)*1.64)<.5:
+   eligible[i]=True
+   if cells[nf,nd,ny]<1000:
+    native[i]=True; cells[nf,nd,ny]+=1
+diff --git a/run25521/reproduce/run_nps_legacy.py b/run25521/reproduce/run_nps_legacy.py
+index 1337f1a..6ae2b4e 100644
+--- a/run25521/reproduce/run_nps_legacy.py
++++ b/run25521/reproduce/run_nps_legacy.py
+@@ -15,7 +15,7 @@ for case in ['unweighted','weighted']:
+ def run(job):
+  case,side,axis,dest,expr=job;log=dest/f'{axis}.log'
+  with log.open('w') as stream:subprocess.run(['root','-l','-b','-q',expr],stdout=stream,stderr=subprocess.STDOUT,check=True)
+- text=log.read_text();assert 'start loop 73188' in text and 'Error in <' not in text,(case,side,axis)
++ text=log.read_text();assert 'start loop 73989' in text and 'Error in <' not in text,(case,side,axis)
+  print(case,side,axis,'PASS',flush=True)
+ with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(run,jobs))
+ # Add neutral banners using the existing vector-preserving label helper.

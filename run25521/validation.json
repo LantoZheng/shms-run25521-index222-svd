@@ -1,0 +1,174 @@
+{
+  "ROOT_version": "6.40.00",
+  "full_HCANA_replay": false,
+  "cases": {
+    "unweighted": {
+      "matrix_sha256": "30a403ad7b61890fb1fb6fdfcda3d6749ea4cbd961108ac430596cb244f40b1d",
+      "separator_and_newline_checks": true,
+      "rows": 132,
+      "normal_element_checks": [
+        {
+          "i": 0,
+          "j": 0,
+          "cpp_value": 73989.0,
+          "independent_sum": 73989.0,
+          "absolute_difference": 0.0
+        },
+        {
+          "i": 0,
+          "j": 1,
+          "cpp_value": -1934.1027475796463,
+          "independent_sum": -1934.1027475796914,
+          "absolute_difference": 4.501998773775995e-11
+        },
+        {
+          "i": 0,
+          "j": 125,
+          "cpp_value": 0.00010948810347324402,
+          "independent_sum": 0.0001094881034732441,
+          "absolute_difference": 8.131516293641283e-20
+        },
+        {
+          "i": 4,
+          "j": 18,
+          "cpp_value": -0.010234778564306699,
+          "independent_sum": -0.010234778564306792,
+          "absolute_difference": 9.367506770274758e-17
+        },
+        {
+          "i": 35,
+          "j": 35,
+          "cpp_value": 0.3028596859259353,
+          "independent_sum": 0.3028596859259456,
+          "absolute_difference": 1.0269562977782698e-14
+        },
+        {
+          "i": 74,
+          "j": 102,
+          "cpp_value": -2.4097544900190325e-08,
+          "independent_sum": -2.409754490019032e-08,
+          "absolute_difference": 6.617444900424222e-24
+        },
+        {
+          "i": 125,
+          "j": 125,
+          "cpp_value": 9.03299806524836e-12,
+          "independent_sum": 9.03299806524863e-12,
+          "absolute_difference": 2.714186384939622e-25
+        }
+      ],
+      "pdf_pages": {
+        "plots/fit_opt_matrix_25521_unweighted_new_matrix_diff.pdf": 1,
+        "plots/fit_opt_matrix_25521_unweighted_old_matrix_diff.pdf": 1,
+        "plots/new/25521_new_xptar_residuals.pdf": 18,
+        "plots/new/25521_new_xptar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_yptar_residuals.pdf": 3,
+        "plots/new/25521_new_yptar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_ytar_residuals.pdf": 3,
+        "plots/new/25521_new_ytar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_ytar_residuals_delta.pdf": 1,
+        "plots/old/25521_old_xptar_residuals.pdf": 18,
+        "plots/old/25521_old_xptar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_yptar_residuals.pdf": 3,
+        "plots/old/25521_old_yptar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_ytar_residuals.pdf": 3,
+        "plots/old/25521_old_ytar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_ytar_residuals_delta.pdf": 1
+      },
+      "diagnostic_entries": {
+        "old_xptar": 73989,
+        "old_yptar": 73989,
+        "old_ytar": 73989,
+        "new_xptar": 73989,
+        "new_yptar": 73989,
+        "new_ytar": 73989
+      },
+      "emitted_coefficients_match_native_solutions_at_legacy_9_digit_precision": true,
+      "matching_events_old_new": true
+    },
+    "weighted": {
+      "matrix_sha256": "c1691285a364c06a86dee1597fb0d33828b6dbeeaf972c2c57c01d864764b9b9",
+      "separator_and_newline_checks": true,
+      "rows": 132,
+      "normal_element_checks": [
+        {
+          "i": 0,
+          "j": 0,
+          "cpp_value": 73989.00000000054,
+          "independent_sum": 73989.0,
+          "absolute_difference": 5.384208634495735e-10
+        },
+        {
+          "i": 0,
+          "j": 1,
+          "cpp_value": 732.7851331219175,
+          "independent_sum": 732.7851331219184,
+          "absolute_difference": 9.094947017729282e-13
+        },
+        {
+          "i": 0,
+          "j": 125,
+          "cpp_value": 2.7297251258828525e-05,
+          "independent_sum": 2.7297251258828535e-05,
+          "absolute_difference": 1.0164395367051604e-20
+        },
+        {
+          "i": 4,
+          "j": 18,
+          "cpp_value": -0.010988969569262519,
+          "independent_sum": -0.01098896956926265,
+          "absolute_difference": 1.3183898417423734e-16
+        },
+        {
+          "i": 35,
+          "j": 35,
+          "cpp_value": 0.43187440257614124,
+          "independent_sum": 0.43187440257614834,
+          "absolute_difference": 7.105427357601002e-15
+        },
+        {
+          "i": 74,
+          "j": 102,
+          "cpp_value": -2.7027006842924837e-08,
+          "independent_sum": -2.7027006842924788e-08,
+          "absolute_difference": 4.963083675318166e-23
+        },
+        {
+          "i": 125,
+          "j": 125,
+          "cpp_value": 6.908321326901509e-12,
+          "independent_sum": 6.908321326901623e-12,
+          "absolute_difference": 1.1470668650637688e-25
+        }
+      ],
+      "pdf_pages": {
+        "plots/fit_opt_matrix_25521_weighted_new_matrix_diff.pdf": 1,
+        "plots/fit_opt_matrix_25521_weighted_old_matrix_diff.pdf": 1,
+        "plots/new/25521_new_xptar_residuals.pdf": 18,
+        "plots/new/25521_new_xptar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_yptar_residuals.pdf": 3,
+        "plots/new/25521_new_yptar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_ytar_residuals.pdf": 3,
+        "plots/new/25521_new_ytar_residuals_by_sieve.pdf": 3,
+        "plots/new/25521_new_ytar_residuals_delta.pdf": 1,
+        "plots/old/25521_old_xptar_residuals.pdf": 18,
+        "plots/old/25521_old_xptar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_yptar_residuals.pdf": 3,
+        "plots/old/25521_old_yptar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_ytar_residuals.pdf": 3,
+        "plots/old/25521_old_ytar_residuals_by_sieve.pdf": 3,
+        "plots/old/25521_old_ytar_residuals_delta.pdf": 1
+      },
+      "diagnostic_entries": {
+        "old_xptar": 73989,
+        "old_yptar": 73989,
+        "old_ytar": 73989,
+        "new_xptar": 73989,
+        "new_yptar": 73989,
+        "new_ytar": 73989
+      },
+      "emitted_coefficients_match_native_solutions_at_legacy_9_digit_precision": true,
+      "matching_events_old_new": true
+    }
+  }
+}

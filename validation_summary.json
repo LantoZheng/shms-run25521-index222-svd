@@ -1,0 +1,29 @@
+{
+  "matched_pdf_files": 162,
+  "matched_pdf_pages": 1140,
+  "matched_plot_artifacts": 200,
+  "rmse_xptar_mrad_ytar_mm_yptar_mrad": {
+    "unweighted_historical": [
+      2.0213048315096165,
+      4.318975988499045,
+      1.5127298001912584
+    ],
+    "unweighted_current": [
+      1.0872936655051437,
+      3.264958792324254,
+      1.44785900471109
+    ],
+    "weighted_historical": [
+      2.0874334399313246,
+      4.391511813429518,
+      1.5185766459066092
+    ],
+    "weighted_current": [
+      1.0916601548464313,
+      3.303322816247824,
+      1.4536189999314895
+    ]
+  },
+  "unweighted_complete_atlas_pages": 325,
+  "unweighted_highlights_pages": 12
+}
