@@ -4,19 +4,15 @@ import json
 import sys
 from pathlib import Path
 
-import contourpy
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from matplotlib.colors import LogNorm, Normalize
-from matplotlib.path import Path as MplPath
+from matplotlib.colors import LogNorm
 import numpy as np
 import pandas as pd
 from scipy.cluster.hierarchy import DisjointSet
-from scipy.interpolate import RegularGridInterpolator
 from scipy.linalg import lstsq
-from scipy.ndimage import gaussian_filter
 from sklearn.model_selection import GroupKFold
 from threadpoolctl import threadpool_limits
 
@@ -24,7 +20,6 @@ repo = Path(__file__).resolve().parents[1]
 out = repo / "comparison"
 config = json.loads((repo/"run25521/config/geometry.json").read_text())
 source = json.loads((out/"atlas_sources.json").read_text())
-index = pd.read_csv(repo/"indexing/cluster_index.csv")
 versions = ["v0.3 clusters  /  upstream unweighted matrix", "Indexed-222  /  refitted unweighted matrix"]
 colors = ["#a4522d", "#146679"]
 foilnames = ["Foil 0  (+10 cm)", "Foil 1  (0 cm)", "Foil 2  (-10 cm)"]
@@ -105,32 +100,6 @@ def compute(npz, matrix, side):
     cv=project(held)
     return pd.DataFrame(dict(entry=entry,foil=f,col=c,row=r,delta=delta,obj=obj,parent=parent,ok=ok,inside=inside,
                  hx=hx,hy=hy,xv=xv,yv=yv,theory=truth[:,1]*1000,cvdy=cv['dy'],cvdx=cv['dx'],cvds=cv['ds'],**project(full)))
-
-def empirical_boundary(points):
-    # Smooth in locally whitened coordinates, then calibrate the level on actual member densities.
-    med=np.median(points,axis=0)
-    clamped=np.clip(points,*np.quantile(points,[.02,.98],axis=0))
-    L=np.linalg.cholesky(np.cov(clamped.T)+np.eye(2)*.015**2)
-    z=np.linalg.solve(L,(points-med).T).T
-    bw=len(z)**(-1/6)
-    lim=np.quantile(z,[.002,.998],axis=0)+np.array([[-1],[1]])*4*bw
-    step=np.maximum((lim[1]-lim[0])/190,bw/5)
-    edges=[np.arange(lim[0,j],lim[1,j]+step[j]*1.5,step[j]) for j in range(2)]
-    h=np.histogram2d(*z.T,bins=edges)[0]
-    sm=gaussian_filter(h,bw/step,mode="constant")
-    centers=[(e[1:]+e[:-1])/2 for e in edges]
-    density=RegularGridInterpolator(centers,sm,bounds_error=False,fill_value=0)(z)
-    level=np.quantile(density,.1)
-    assert level>0
-    contours=contourpy.contour_generator(x=centers[0],y=centers[1],z=sm.T).lines(level)
-    loops=[np.asarray(v)@L.T+med for v in contours if len(v)>3]
-    inside=np.zeros(len(points),bool)
-    for poly in loops:
-        assert np.allclose(poly[0],poly[-1])
-        inside ^= MplPath(poly).contains_points(points)
-    assert loops and abs(inside.mean()-.9)<=max(.024,2/len(z))
-    return loops,inside.sum()
-
 
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':9,'axes.spines.top':False,'axes.spines.right':False,
                      'pdf.fonttype':42,'axes.labelcolor':'#344856','axes.titlecolor':'#183849','figure.facecolor':'white'})
@@ -220,8 +189,6 @@ def trend(axis,k):
         axs=[p[f,0] for p in pan];sync(axs,'y');sync(axs,'x')
     finish(fig,title)
 
-def limits(vals,step):
-    return np.arange(np.floor(min(v.min() for v in vals)/step)*step,(np.ceil(max(v.max() for v in vals)/step)+1)*step,step)
 def heat(ax,v,xe,ye,norm):
     h=np.histogram2d(v[:,0],v[:,1],(xe,ye))[0]
     ax.pcolormesh(xe,ye,np.ma.masked_equal(h,0).T,norm=norm,cmap='GnBu',rasterized=True)
@@ -278,83 +245,6 @@ def overlay():
         ax.legend(frameon=False);ax.set(xlabel='Reconstructed Ytar (mm)',ylabel='Events / mm')
     sync([p[0,0] for p in pan],'y');finish(fig,title)
 
-def edgecol():
-    title='Foil 0, column -5  |  Momentum dependence of the sieve X residual'
-    fig,pan=layout(title,'The fit window is -15% < delta < +22%. Histograms and trend points use all resolved events in this column.',2,1)
-    data=[byfoil(i,0).query('col == -5') for i in range(2)]
-    e=limits([g.dx for g in data],1)
-    for i,g in enumerate(data):
-        a,b=pan[i][:,0]
-        for inside,color,label in [(True,colors[i],'In window'),(False,'#586574','Outside window')]:
-            h=g[g.inside==inside];hist(a,h.dx,e,label=f'{label}  |  N = {len(h):,}',color=color)
-            for _,s in h.groupby(pd.cut(h.delta,delta_edges,right=False),observed=True):
-                b.errorbar(s.delta.mean(),s.dx.mean(),yerr=s.dx.std(ddof=0),color=color,fmt='o',ms=4,capsize=3)
-        a.legend(frameon=False);a.set(xlabel='Sieve X residual (mm)',ylabel='Events / mm')
-        b.axvline(-15,ls=':',color='.4');b.axhline(0,color='.5',lw=.8);b.set(xlabel='Momentum deviation (%)',ylabel='Mean +/- SD (mm)')
-    for row in range(2):
-        for axis in ['x','y']:sync([p[row,0] for p in pan],axis)
-    finish(fig,title)
-
-def clusters():
-    results=[]
-    for i,df in enumerate(data):
-        names=index.set_index('cluster_id').cluster.to_dict() if i else dict(zip(index.previous_id,index.previous_cluster))
-        items=[]
-        for obj,g in df.groupby('obj'):
-            pts=g[['sx','sy']].to_numpy()
-            assert len(g[['foil','hx','hy']].drop_duplicates())==1
-            loops,count=empirical_boundary(pts)
-            items.append(dict(name=names[obj],parent=g.parent.iloc[0],foil=g.foil.iloc[0],med=np.median(pts,axis=0),
-                              hole=g[['hx','hy']].iloc[0].to_numpy(),loops=loops,n=len(pts),inside=int(count),review=not g.ok.all()))
-        assert sum(k['n'] for k in items)==106058 and len(items)==[219,222][i]
-        results.append(items)
-    return results
-
-def marks(ax,items,labels=False):
-    for k in items:
-        x,y=k['med'];hx,hy=k['hole'];color='#ac3343' if k['review'] else plt.cm.tab10((int(k['name'][1:])*7)%10)
-        for loop in k['loops']:ax.plot(*loop.T,color=color,lw=.85)
-        ax.plot([x,hx],[y,hy],color='#6f463a',lw=.8)
-        ax.scatter(hx,hy,marker='+',s=17,lw=.8,color='#28292c')
-        ax.plot(x,y,'.',color=color,ms=3)
-        if labels:
-            ax.annotate(k['name']+('*' if k['review'] else ''),(x,y),xytext=(0,4),textcoords='offset points',
-                        ha='center',fontsize=6.3,color='#182c3e',bbox=dict(facecolor='white',alpha=.63,edgecolor='none',pad=.25))
-def clusterpage(mode,f=None):
-    title={'density':'Sieve hit densities and cluster boundaries','vectors':'Cluster centers and their assigned holes',
-           'labeled':f'Indexed cluster map  |  {foilnames[f] if f is not None else ""}'}[mode]
-    fig,pan=layout(title,'Curves enclose approximately 90% of members. Dots are cluster medians; segments lead to assigned hole centers (+).',
-                   1 if f is not None else 3,1,height=6.7 if f is not None else 11,
-                   foot='All 106,058 events on both sides. Indexed-222 includes provisional C199 (147 events) here. Asterisk marks its label.')
-    xe=np.linspace(-16,16,161);ye=np.linspace(-11,11,111)
-    fs=range(3) if f is None else [f]
-    norm=LogNorm(1,max(np.histogram2d(g.sx,g.sy,(xe,ye))[0].max() for d in data for _,g in d.groupby('foil')))
-    for i in range(2):
-        for j,foil in enumerate(fs):
-            ax=pan[i][j,0];g=data[i].query('foil==@foil');items=[s for s in cluster_data[i] if s['foil']==foil]
-            missing=int((~g.sx.between(-16,16)|~g.sy.between(-11,11)).sum())
-            if mode=='density':heat(ax,g[['sx','sy']].to_numpy(),xe,ye,norm)
-            marks(ax,items,mode=='labeled');ax.set(xlim=(-16,16),ylim=(-11,11),xlabel='Sieve X (cm)',ylabel='Sieve Y (cm)',
-                title=f'{foilnames[foil]}  |  {len(g):,} events   {len(items)} clusters   {missing} outside view')
-            ax.set_aspect('equal',adjustable='box')
-            if mode=='density':fig.colorbar(ax.collections[0],ax=ax,pad=.02,label='Events / bin')
-    finish(fig,title)
-
-def splits():
-    title='Three focal-plane cluster splits'
-    fig,pan=layout(title,'The same member events are shown on each side, projected with their respective matrix and target assignment.',
-                   foot='Each marker cloud uses the full parent membership. Lines connect cluster medians to assigned holes. Rows share the same X and Y limits across sides.')
-    for j,parent in enumerate([500,800,2400]):
-        clouds=[d[d.parent==parent] for d in data]
-        assert np.array_equal(clouds[0].entry.values,clouds[1].entry.values)
-        for i,g in enumerate(clouds):
-            ax=pan[i][j,0];items=[s for s in cluster_data[i] if s['parent']==parent]
-            for _,h in g.groupby('obj'):
-                ax.scatter(h.sx,h.sy,s=3,alpha=.42,rasterized=True)
-            marks(ax,items);ax.set(title='   +   '.join(k['name']+'  ('+str(k['n'])+')' for k in items),xlabel='Sieve X (cm)',ylabel='Sieve Y (cm)')
-        for axis in ['x','y']:sync([p[j,0] for p in pan],axis)
-    finish(fig,title)
-
 if __name__=='__main__':
     left_npz,right_npz,left_matrix=map(Path,sys.argv[1:])
     right_matrix=repo/'run25521/unweighted/matrices/nps_shms_newfit_25521_unweighted.dat'
@@ -362,7 +252,6 @@ if __name__=='__main__':
         data=[compute(left_npz,left_matrix,0),compute(right_npz,right_matrix,1)]
         assert np.array_equal(data[0].entry,data[1].entry) and np.array_equal(data[0].obj,data[1].parent)
         usable=[g[g.ok] for g in data]
-        cluster_data=clusters()
     with PdfPages(out/'foil_diagnostics_comparison.pdf',metadata=dict(Title='Run 25521 | Foil and sieve diagnostics',Author='Run 25521 optics analysis')) as pdf:
         histpage(False);histpage(True)
         for mode in ['nominal','reconstructed','held']:maps(mode)
@@ -371,10 +260,8 @@ if __name__=='__main__':
         trend('delta','dy')
         for axis in ['row','col']:
             for f in range(3):individuals(f,axis)
-        overlay();edgecol()
-        clusterpage('density');splits();clusterpage('vectors')
-        for f in range(3):clusterpage('labeled',f)
-        assert pdf.get_pagecount()==len(audit['pages'])==27
+        overlay()
+        assert pdf.get_pagecount()==len(audit['pages'])==20
     for i,g in enumerate(usable):
         m=g.groupby('foil').dy.agg(['size','mean',lambda x:x.std(ddof=0)])
         audit['matrix_checks'][i]['ytar_by_foil']=[dict(foil=int(f),events=int(n),bias_mm=b,sd_mm=s) for f,(n,b,s) in m.iterrows()]

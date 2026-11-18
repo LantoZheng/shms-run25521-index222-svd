@@ -159,13 +159,6 @@
     "Foil 0  (+10 cm)  |  Sieve residuals for each column",
     "Foil 1  (0 cm)  |  Sieve residuals for each column",
     "Foil 2  (-10 cm)  |  Sieve residuals for each column",
-    "The three reconstructed target Y peaks",
-    "Foil 0, column -5  |  Momentum dependence of the sieve X residual",
-    "Sieve hit densities and cluster boundaries",
-    "Three focal-plane cluster splits",
-    "Cluster centers and their assigned holes",
-    "Indexed cluster map  |  Foil 0  (+10 cm)",
-    "Indexed cluster map  |  Foil 1  (0 cm)",
-    "Indexed cluster map  |  Foil 2  (-10 cm)"
+    "The three reconstructed target Y peaks"
   ]
 }
